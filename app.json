@@ -1,21 +1,75 @@
 {
   "expo": {
-    "name": "parker-app",
+    "name": "Parker",
     "slug": "parker-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "parker",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "unstable_reactLegacyComponentNames": [
+        "AIRMap",
+        "AIRMapCallout",
+        "AIRMapCalloutSubview",
+        "AIRMapCircle",
+        "AIRMapHeatmap",
+        "AIRMapLocalTile",
+        "AIRMapMarker",
+        "AIRMapOverlay",
+        "AIRMapPolygon",
+        "AIRMapPolyline",
+        "AIRMapUrlTile",
+        "AIRMapWMSTile",
+        "AIRMap",
+        "AIRMapCallout",
+        "AIRMapCalloutSubview",
+        "AIRMapCircle",
+        "AIRMapHeatmap",
+        "AIRMapLocalTile",
+        "AIRMapMarker",
+        "AIRMapOverlay",
+        "AIRMapPolygon",
+        "AIRMapPolyline",
+        "AIRMapUrlTile",
+        "AIRMapWMSTile"
+      ],
+      "bundleIdentifier": "com.anonymous.parker-app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "unstable_reactLegacyComponentNames": [
+        "AIRMap",
+        "AIRMapCallout",
+        "AIRMapCalloutSubview",
+        "AIRMapCircle",
+        "AIRMapHeatmap",
+        "AIRMapLocalTile",
+        "AIRMapMarker",
+        "AIRMapOverlay",
+        "AIRMapPolygon",
+        "AIRMapPolyline",
+        "AIRMapUrlTile",
+        "AIRMapWMSTile",
+        "AIRMap",
+        "AIRMapCallout",
+        "AIRMapCalloutSubview",
+        "AIRMapCircle",
+        "AIRMapHeatmap",
+        "AIRMapLocalTile",
+        "AIRMapMarker",
+        "AIRMapOverlay",
+        "AIRMapPolygon",
+        "AIRMapPolyline",
+        "AIRMapUrlTile",
+        "AIRMapWMSTile"
+      ],
+      "package": "com.anonymous.parkerapp"
     },
     "web": {
       "bundler": "metro",
