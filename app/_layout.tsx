@@ -11,6 +11,7 @@ import {
 } from "@react-navigation/native";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BffClientProvider } from "@/modules/bff/context/bff-client-context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,11 +24,15 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-        </Stack>
-      </ThemeProvider>
+      <BffClientProvider>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+          </Stack>
+        </ThemeProvider>
+      </BffClientProvider>
     </GestureHandlerRootView>
   );
 }

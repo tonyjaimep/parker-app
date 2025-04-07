@@ -2,10 +2,9 @@ import { LotDetail } from "@/modules/lots/components/detail";
 import { useGetLotsWithAvailability } from "@/modules/lots/hooks/use-get-lots-with-availability";
 import { LotWithAvailability } from "@/modules/lots/types";
 import { BottomDrawer } from "@/modules/ui/components/bottom-drawer";
-import Button from "@/modules/ui/components/button";
 import { useCallback, useRef, useState } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
-import MapView, { Marker, MarkerPressEvent, Region } from "react-native-maps";
+import { Dimensions, StyleSheet } from "react-native";
+import MapView, { Marker, MarkerPressEvent } from "react-native-maps";
 import { Screen } from "react-native-screens";
 
 export default function HomeScreen() {
