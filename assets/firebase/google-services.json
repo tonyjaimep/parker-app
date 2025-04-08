@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "647986253006",
+    "project_id": "parker-6f411",
+    "storage_bucket": "parker-6f411.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647986253006:android:662c6d3a0fe82d8dc3949f",
+        "android_client_info": {
+          "package_name": "com.anonymous.parkerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz6QLwRgIYBTqKHUjxWTtvm4JiuUPiSBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

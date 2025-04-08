@@ -18,7 +18,7 @@ export const useGetLotsWithAvailability = () => {
     execute,
     isLoading,
     result: lots,
-  } = useBffLazyQuery<LotWithAvailability>("/lots");
+  } = useBffLazyQuery<LotWithAvailability[]>("/lots");
 
   const getLotsWithAvailability = useCallback(
     async (bounds: Bounds) => {

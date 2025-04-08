@@ -12,6 +12,7 @@ type BffClientContextProps = PropsWithChildren;
 interface BffClientProviderState {
   bffClient: AxiosInstance;
   setJwt: (token: string | null) => void;
+  jwt: string | null;
 }
 
 const BffClientContext = createContext<BffClientProviderState | undefined>(
@@ -22,7 +23,7 @@ export const BffClientProvider = ({ children }: BffClientContextProps) => {
   const [jwt, setJwt] = useState<string | null>(null);
 
   const bffClient = useMemo(() => {
-    return axios.create({
+    const client = axios.create({
       baseURL: process.env.EXPO_PUBLIC_BFF_BASE_URL,
       headers: {
         "Content-Type": "application/json",
@@ -30,14 +31,17 @@ export const BffClientProvider = ({ children }: BffClientContextProps) => {
         ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
       },
     });
+
+    return client;
   }, [jwt]);
 
   const value = useMemo(
     () => ({
       bffClient,
+      jwt,
       setJwt,
     }),
-    [bffClient],
+    [bffClient, jwt],
   );
 
   return (
@@ -55,10 +59,18 @@ export const useBffClient = () => {
   return context.bffClient;
 };
 
-export const useSetJwt = () => {
+export const useSetBffToken = () => {
   const context = useContext(BffClientContext);
   if (!context) {
-    throw new Error("useSetJwtToken must be used within an BffClientProvider");
+    throw new Error("useSetBffToken must be used within an BffClientProvider");
   }
   return context.setJwt;
+};
+
+export const useBffToken = () => {
+  const context = useContext(BffClientContext);
+  if (!context) {
+    throw new Error("useBffToken must be used within an BffClientProvider");
+  }
+  return context.jwt;
 };

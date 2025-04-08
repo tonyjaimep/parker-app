@@ -42,7 +42,7 @@ export const Screen = <T = any,>({
   );
 
   return (
-    <BtsScreen className="flex flex-1">
+    <BtsScreen style={{ flex: 1 }}>
       {isListScreenProps(list, props) ? (
         <>
           <FlatList {...props} contentContainerStyle={containerStyle} />
@@ -51,7 +51,7 @@ export const Screen = <T = any,>({
       ) : (
         <ScrollView
           {...props}
-          className="flex flex-1"
+          className={`flex flex-1 ${props.className || ""}`}
           contentContainerStyle={containerStyle}
         >
           {props.children}

@@ -36,7 +36,8 @@
         "AIRMapUrlTile",
         "AIRMapWMSTile"
       ],
-      "bundleIdentifier": "com.anonymous.parker-app"
+      "bundleIdentifier": "com.anonymous.parker-app",
+      "googleServicesFile": "./assets/firebase/GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -69,7 +70,8 @@
         "AIRMapUrlTile",
         "AIRMapWMSTile"
       ],
-      "package": "com.anonymous.parkerapp"
+      "package": "com.anonymous.parkerapp",
+      "googleServicesFile": "./assets/firebase/google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -77,6 +79,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
       "expo-router",
       [
         "expo-splash-screen",
@@ -85,6 +89,14 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
         }
       ]
     ],

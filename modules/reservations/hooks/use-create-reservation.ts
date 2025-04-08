@@ -1,34 +1,45 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useGetCurrentReservation } from "./use-get-current-reservation";
-import { Reservation } from "../types";
+import { Reservation, ReservationCreateDto } from "../types";
+import { isEmpty } from "lodash";
+import { useBffAction } from "@/modules/bff/hooks/use-bff-action";
+import { BffHookOptions } from "@/modules/bff/utils/types";
 
-export const useCreateReservation = () => {
-  const [isLoading, setIsLoading] = useState(false);
+export const useCreateReservation = (
+  { lotId }: { lotId: number },
+  options: BffHookOptions<Reservation>,
+) => {
+  const { execute, isLoading: isCreatingReservation } = useBffAction<
+    ReservationCreateDto,
+    Reservation
+  >("/reservation", options);
 
   const onReservationFetched = useCallback(
-    async (reservation: Reservation | null) => {
-      if (reservation) {
-        return;
+    async (reservation: Reservation | {}) => {
+      if (isEmpty(reservation)) {
+        execute({
+          lotId,
+        });
       } else {
-        setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setIsLoading(false);
+        return;
       }
     },
-    [],
+    [lotId],
   );
 
-  const { getCurrentReservation: checkForCurrentReservation } =
-    useGetCurrentReservation({
-      onSuccess: onReservationFetched,
-    });
+  const {
+    getCurrentReservation: checkForCurrentReservation,
+    isLoading: isLoadingCurrentReservation,
+  } = useGetCurrentReservation({
+    onSuccess: onReservationFetched,
+  });
 
   const createReservation = useCallback(async () => {
     await checkForCurrentReservation();
   }, []);
 
   return {
-    isLoading,
+    isLoading: isLoadingCurrentReservation || isCreatingReservation,
     createReservation,
   };
 };

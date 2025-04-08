@@ -23,7 +23,6 @@ export default function HomeScreen() {
 
   const handleLotMarkerPressed = useCallback(
     async (event: MarkerPressEvent, lot: LotWithAvailability) => {
-      console.log(event.nativeEvent.id);
       mapRef.current?.animateToRegion({
         ...event.nativeEvent.coordinate,
         latitudeDelta: 0.02,
@@ -68,7 +67,9 @@ export default function HomeScreen() {
           : null}
       </MapView>
       <BottomDrawer isVisible={!!selectedLot} onDismiss={unsetSelectedLot}>
-        {selectedLot ? <LotDetail lot={selectedLot} /> : null}
+        {selectedLot ? (
+          <LotDetail lot={selectedLot} onDismiss={unsetSelectedLot} />
+        ) : null}
       </BottomDrawer>
     </Screen>
   );

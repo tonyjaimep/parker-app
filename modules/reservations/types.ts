@@ -4,3 +4,7 @@ export type Reservation = {
   id: number;
   lot: Lot;
 };
+
+export type ReservationCreateDto = {
+  lotId: number;
+};

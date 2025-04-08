@@ -12,6 +12,7 @@ import {
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BffClientProvider } from "@/modules/bff/context/bff-client-context";
+import { AuthContextProvider } from "@/modules/auth/context/auth-context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,13 +26,17 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView>
       <BffClientProvider>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-          </Stack>
-        </ThemeProvider>
+        <AuthContextProvider>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="auth/index" />
+              <Stack.Screen name="auth/forgot-password" />
+            </Stack>
+          </ThemeProvider>
+        </AuthContextProvider>
       </BffClientProvider>
     </GestureHandlerRootView>
   );

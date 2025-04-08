@@ -3,17 +3,31 @@ import { Text, View } from "react-native";
 import { LotWithAvailability } from "../types";
 import { useCallback } from "react";
 import { useCreateReservation } from "@/modules/reservations/hooks/use-create-reservation";
+import { useIsAuthenticated } from "@/modules/auth/context/auth-context";
+import { useRouter } from "expo-router";
 
 type LotDetailProps = {
   lot: LotWithAvailability;
+  onDismiss: () => void;
 };
 
-export const LotDetail = ({ lot }: LotDetailProps) => {
-  const { createReservation } = useCreateReservation();
+export const LotDetail = ({ lot, onDismiss }: LotDetailProps) => {
+  const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const { createReservation } = useCreateReservation(
+    { lotId: lot.id },
+    { onSuccess: onDismiss },
+  );
 
-  const onReservationPressed = useCallback(() => {
-    createReservation(lot.id);
-  }, [lot]);
+  const onCreateReservationPressed = useCallback(async () => {
+    if (!isAuthenticated) {
+      onDismiss();
+      router.navigate("/auth");
+    } else {
+      await createReservation();
+      onDismiss();
+    }
+  }, []);
 
   return (
     <View>
@@ -25,7 +39,7 @@ export const LotDetail = ({ lot }: LotDetailProps) => {
         {lot.availability === 1 ? "e" : "es"}
       </Text>
       {lot.availability >= 1 ? (
-        <Button label="Reservar" onPress={createReservation} />
+        <Button label="Reservar" onPress={onCreateReservationPressed} />
       ) : null}
     </View>
   );

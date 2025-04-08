@@ -1,13 +1,14 @@
 import { createContext, PropsWithChildren, useEffect } from "react";
 import { useGetCurrentReservation } from "./hooks/use-get-current-reservation";
+import { Reservation } from "./types";
 
 type ReservationContext = {
-  checkForReservation: () => void | Promise<void>;
+  checkForReservation: () => Promise<{} | Reservation | null>;
   isLoading: boolean;
 };
 
 const CurrentReservationContext = createContext<ReservationContext>({
-  checkForReservation: () => {},
+  checkForReservation: async () => ({}),
   isLoading: false,
 });
 
@@ -20,10 +21,8 @@ export const CurrentReservationProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
-    if (!isLoading) {
-      getCurrentReservation();
-    }
-  }, [isLoading, getCurrentReservation]);
+    getCurrentReservation();
+  }, [getCurrentReservation]);
 
   return (
     <CurrentReservationContext.Provider value={value}>
