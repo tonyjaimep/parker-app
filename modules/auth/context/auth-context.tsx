@@ -80,6 +80,8 @@ export const AuthContextProvider = ({
   const loadAuth = useCallback(async () => {
     const token = await AsyncStorage.getItem(ASYNC_STORAGE_TOKEN_KEY);
 
+    console.log("token", token)
+
     if (token) {
       try {
         const response = await bffClient.get<User>(`/users/me`, {

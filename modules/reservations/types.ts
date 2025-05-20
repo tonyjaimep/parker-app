@@ -2,9 +2,11 @@ import { Lot } from "../lots/types";
 
 export type Reservation = {
   id: number;
-  lot: Lot;
+  spot: {
+    lot: Lot
+  };
 };
 
 export type ReservationCreateDto = {
-  lotId: number;
+  spotId: number;
 };

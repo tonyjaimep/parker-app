@@ -1,21 +1,26 @@
-import { createContext, PropsWithChildren, useEffect } from "react";
+import { createContext, PropsWithChildren, useContext, useEffect } from "react";
 import { useGetCurrentReservation } from "./hooks/use-get-current-reservation";
 import { Reservation } from "./types";
+import { isEmpty } from "lodash";
 
 type ReservationContext = {
+  currentReservation: Reservation | null;
   checkForReservation: () => Promise<{} | Reservation | null>;
   isLoading: boolean;
 };
 
 const CurrentReservationContext = createContext<ReservationContext>({
+  currentReservation: null,
   checkForReservation: async () => ({}),
   isLoading: false,
 });
 
 export const CurrentReservationProvider = ({ children }: PropsWithChildren) => {
-  const { getCurrentReservation, isLoading } = useGetCurrentReservation();
+  const { currentReservation, getCurrentReservation, isLoading } =
+    useGetCurrentReservation();
 
   const value = {
+    currentReservation: isEmpty(currentReservation) ? null : currentReservation,
     checkForReservation: getCurrentReservation,
     isLoading,
   };
@@ -29,4 +34,19 @@ export const CurrentReservationProvider = ({ children }: PropsWithChildren) => {
       {children}
     </CurrentReservationContext.Provider>
   );
+};
+
+export const useCheckForReservation = () => {
+  const { checkForReservation } = useContext(CurrentReservationContext);
+  return checkForReservation;
+};
+
+export const useCurrentReservation = () => {
+  const { currentReservation } = useContext(CurrentReservationContext);
+  return currentReservation;
+};
+
+export const useIsLoadingCurrentReservation = () => {
+  const { isLoading } = useContext(CurrentReservationContext);
+  return isLoading;
 };

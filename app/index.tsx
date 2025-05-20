@@ -3,9 +3,11 @@ import { useGetLotsWithAvailability } from "@/modules/lots/hooks/use-get-lots-wi
 import { LotWithAvailability } from "@/modules/lots/types";
 import { BottomDrawer } from "@/modules/ui/components/bottom-drawer";
 import { useCallback, useRef, useState } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { Marker, MarkerPressEvent } from "react-native-maps";
 import { Screen } from "react-native-screens";
+import CurrentReservationWidget from '@/modules/reservations/components/current-reservation-widget';
+import AuthWidget from '@/modules/auth/components/AuthWidget';
 
 export default function HomeScreen() {
   const mapRef = useRef<MapView>(null);
@@ -19,7 +21,7 @@ export default function HomeScreen() {
     if (boundaries) {
       getLotsWithAvailability(boundaries);
     }
-  }, []);
+  }, [getLotsWithAvailability]);
 
   const handleLotMarkerPressed = useCallback(
     async (event: MarkerPressEvent, lot: LotWithAvailability) => {
@@ -66,6 +68,15 @@ export default function HomeScreen() {
             ))
           : null}
       </MapView>
+
+      <View className="absolute top-[60px] right-[20px] z-10">
+        <AuthWidget />
+      </View>
+
+      <View className="absolute bottom-[20px] left-0 right-0 z-10 items-center">
+        <CurrentReservationWidget />
+      </View>
+
       <BottomDrawer isVisible={!!selectedLot} onDismiss={unsetSelectedLot}>
         {selectedLot ? (
           <LotDetail lot={selectedLot} onDismiss={unsetSelectedLot} />
