@@ -4,11 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useIsAuthenticated } from '../context/auth-context';
 
-interface AuthWidgetProps {
-  // You can add props here if needed in the future, e.g., user data
-}
 
-const AuthWidget: React.FC<AuthWidgetProps> = () => {
+const AuthWidget = () => {
   const router = useRouter();
   const isLoggedIn = useIsAuthenticated();
 
@@ -21,7 +18,7 @@ const AuthWidget: React.FC<AuthWidgetProps> = () => {
 
   return (
     <TouchableOpacity
-      className="flex-row items-center p-4 bg-neutral-200 rounded-full shadow gap-4"
+      className="flex-row items-center p-4 bg-neutral-100 rounded-full shadow gap-4"
       onPress={handlePress}
       activeOpacity={0.7}
     >
