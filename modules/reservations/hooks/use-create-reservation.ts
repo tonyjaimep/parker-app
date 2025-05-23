@@ -4,6 +4,7 @@ import { Reservation, ReservationCreateDto } from "../types";
 import { isEmpty } from "lodash";
 import { useBffAction } from "@/modules/bff/hooks/use-bff-action";
 import { BffHookOptions } from "@/modules/bff/utils/types";
+import { AxiosResponse } from "axios";
 
 export const useCreateReservation = (
   { lotId }: { lotId: number },
@@ -12,12 +13,14 @@ export const useCreateReservation = (
   const { execute, isLoading: isCreatingReservation } = useBffAction<
     ReservationCreateDto,
     Reservation
-  >("/reservation", options);
+  >("/reservations", options);
 
   const onReservationFetched = useCallback(
-    async (reservation: Reservation | {}) => {
-      if (isEmpty(reservation)) {
-        execute({
+    async (response: AxiosResponse<Reservation | {}>) => {
+      const reservation = response.data;
+
+      if (response.status === 200 && isEmpty(reservation)) {
+        await execute({
           lotId,
         });
       } else {

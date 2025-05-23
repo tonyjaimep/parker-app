@@ -41,9 +41,9 @@ export const useBffLazyQuery = <R = unknown>(
         return response.data as R;
       } catch (e) {
         if (isAxiosError(e)) {
-          console.log(e);
           onError?.(e.response!);
         }
+        return null;
       } finally {
         setIsLoading(false);
       }

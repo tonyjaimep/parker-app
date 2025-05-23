@@ -6,6 +6,8 @@ import { useCreateReservation } from "@/modules/reservations/hooks/use-create-re
 import { useIsAuthenticated } from "@/modules/auth/context/auth-context";
 import { useRouter } from "expo-router";
 import { useCheckForReservation } from "@/modules/reservations/context";
+import { AxiosResponse } from "axios";
+import { Reservation } from "@/modules/reservations/types";
 
 type LotDetailProps = {
   lot: LotWithAvailability;
@@ -16,9 +18,15 @@ export const LotDetail = ({ lot, onDismiss }: LotDetailProps) => {
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const checkForReservation = useCheckForReservation();
+
+  const handleReservationCreated = useCallback(() => {
+    checkForReservation();
+    onDismiss();
+  }, [onDismiss, checkForReservation]);
+
   const { createReservation } = useCreateReservation(
     { lotId: lot.id },
-    { onSuccess: onDismiss },
+    { onSuccess: handleReservationCreated, onError: console.error },
   );
 
   const onCreateReservationPressed = useCallback(async () => {

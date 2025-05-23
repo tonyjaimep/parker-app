@@ -4,8 +4,8 @@ import { BottomDrawer } from "@/modules/ui/components/bottom-drawer";
 import { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Screen } from "react-native-screens";
-import CurrentReservationWidget from '@/modules/reservations/components/current-reservation-widget';
-import AuthWidget from '@/modules/auth/components/AuthWidget';
+import CurrentReservationWidget from "@/modules/reservations/components/current-reservation-widget";
+import AuthWidget from "@/modules/auth/components/AuthWidget";
 import { LotsMap } from "@/modules/lots/components/lots-map";
 
 export default function HomeScreen() {
@@ -19,7 +19,7 @@ export default function HomeScreen() {
     <Screen style={styles.screen}>
       <LotsMap style={styles.map} onLotSelected={setSelectedLot} />
 
-      <View className="pt-safe px-4">
+      <View className="pt-safe px-4 gap-4">
         <View className="flex-row justify-between items-center">
           <AuthWidget />
         </View>

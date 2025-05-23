@@ -1,22 +1,42 @@
-import MapView, { Marker, MarkerPressEvent } from "react-native-maps"
-import { Dimensions } from "react-native"
-import { useCallback, useRef } from "react"
-import { LotWithAvailability } from "../../types"
-import { useGetLotsWithAvailability } from "../../hooks/use-get-lots-with-availability"
+import MapView, { Marker, MarkerPressEvent } from "react-native-maps";
+import { useCallback, useEffect, useRef } from "react";
+import { LotWithAvailability } from "../../types";
+import { useGetLotsWithAvailability } from "../../hooks/use-get-lots-with-availability";
+import { throttle } from "lodash";
 
-export const LotsMap = ({ style, onLotSelected }: { style: any, onLotSelected: (lot: any) => void }) => {
+export const LotsMap = ({
+  style,
+  onLotSelected,
+}: {
+  style: any;
+  onLotSelected: (lot: any) => void;
+}) => {
   const { lots, getLotsWithAvailability } = useGetLotsWithAvailability();
 
   const mapRef = useRef<MapView>(null);
+
+  const throttledGetLotsWithAvailability = useCallback(
+    throttle(async (boundaries: any) => {
+      getLotsWithAvailability(boundaries);
+    }, 500),
+    [getLotsWithAvailability],
+  );
+
+  useEffect(() => {
+    mapRef.current?.getMapBoundaries().then((boundaries) => {
+      if (boundaries) {
+        throttledGetLotsWithAvailability(boundaries);
+      }
+    });
+  }, [throttledGetLotsWithAvailability]);
 
   const handleRegionChange = useCallback(async () => {
     const boundaries = await mapRef.current?.getMapBoundaries();
 
     if (boundaries) {
-      getLotsWithAvailability(boundaries);
+      throttledGetLotsWithAvailability(boundaries);
     }
   }, [getLotsWithAvailability]);
-
 
   const handleLotMarkerPressed = useCallback(
     async (event: MarkerPressEvent, lot: LotWithAvailability) => {
@@ -55,5 +75,6 @@ export const LotsMap = ({ style, onLotSelected }: { style: any, onLotSelected: (
           ))
         : null}
     </MapView>
-  )
-}
+  );
+};
+
