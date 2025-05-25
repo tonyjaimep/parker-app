@@ -8,7 +8,7 @@ import {
 import { MiniTitleText } from "@/modules/ui/components/text/mini-title";
 import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
 import { BodyText } from "@/modules/ui/components/text/body";
-import { format, formatDistanceToNow } from "date-fns";
+import { CurrentReservationExpiration } from "./expiration";
 
 const CurrentReservationWidget: React.FC = () => {
   const router = useRouter();
@@ -39,20 +39,14 @@ const CurrentReservationWidget: React.FC = () => {
       className="bg-neutral-100 p-4 rounded-xl shadow-md"
     >
       <MicroTitleText className="mb-2">Active Reservation</MicroTitleText>
+      {currentReservation.expiresAt ? (
+        <CurrentReservationExpiration
+          expiresAt={currentReservation.expiresAt}
+        />
+      ) : null}
       <View className="mb-2">
         <MiniTitleText>{currentReservation.lot.address}</MiniTitleText>
         <BodyText>{currentReservation.lot.name}</BodyText>
-      </View>
-      <View>
-        <MicroTitleText>Expires in</MicroTitleText>
-        {currentReservation.expiresAt ? (
-          <View className="flex flex-row justify-between gap-4">
-            <BodyText className="mb-4">
-              {formatDistanceToNow(currentReservation.expiresAt)} (
-              {format(currentReservation.expiresAt, "MMM dd 'at' h:mm a")})
-            </BodyText>
-          </View>
-        ) : null}
       </View>
       <Text className="text-sm text-center font-medium">
         Tap to view details
