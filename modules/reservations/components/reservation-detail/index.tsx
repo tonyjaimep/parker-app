@@ -1,6 +1,10 @@
 import React from "react";
-import { View, Text } from "react-native";
 import { Reservation } from "../../types";
+import { BodyText } from "@/modules/ui/components/text/body";
+import { MiniTitleText } from "@/modules/ui/components/text/mini-title";
+import { View } from "react-native";
+import { CurrentReservationExpiration } from "../reservation-expiration";
+import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
 
 interface ReservationDetailProps {
   reservation: Reservation;
@@ -11,22 +15,20 @@ const ReservationDetail: React.FC<ReservationDetailProps> = ({
 }) => {
   if (!reservation || !reservation.lot) {
     return (
-      <View className="p-4 bg-white rounded-lg m-4 shadow-lg">
-        <Text className="text-base text-red-600 text-center">
-          Reservation data or lot details not available.
-        </Text>
-      </View>
+      <BodyText>Reservation data or lot details not available.</BodyText>
     );
   }
 
   return (
-    <View className="p-4 bg-white rounded-lg m-4 shadow-lg">
-      <Text className="text-xl font-bold mb-3">Reservation Details</Text>
-      <Text className="text-base mb-2">Reservation ID: {reservation.id}</Text>
-      <Text className="text-base mb-2">Lot Name: {reservation.lot.name}</Text>
-      <Text className="text-base mb-2">
+    <View>
+      <MiniTitleText className="mb-2">Reservation Details</MiniTitleText>
+      <BodyText className="mb-2">Lot Name: {reservation.lot.name}</BodyText>
+      <MicroTitleText className="mb-2">
         Lot Address: {reservation.lot.address}
-      </Text>
+      </MicroTitleText>
+      {reservation.expiresAt ? (
+        <CurrentReservationExpiration expiresAt={reservation.expiresAt} />
+      ) : null}
     </View>
   );
 };

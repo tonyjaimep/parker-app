@@ -8,7 +8,7 @@ import {
 import { MiniTitleText } from "@/modules/ui/components/text/mini-title";
 import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
 import { BodyText } from "@/modules/ui/components/text/body";
-import { CurrentReservationExpiration } from "./expiration";
+import { CurrentReservationExpiration } from "../reservation-expiration";
 
 const CurrentReservationWidget: React.FC = () => {
   const router = useRouter();
