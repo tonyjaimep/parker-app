@@ -1,4 +1,8 @@
-import MapView, { Marker, MarkerPressEvent } from "react-native-maps";
+import MapView, {
+  Marker,
+  MarkerPressEvent,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 import { useCallback, useEffect, useRef } from "react";
 import { LotWithAvailability } from "../../types";
 import { useGetLotsWithAvailability } from "../../hooks/use-get-lots-with-availability";
@@ -62,19 +66,18 @@ export const LotsMap = ({
       onRegionChangeComplete={handleRegionChange}
       showsTraffic={false}
       showsPointsOfInterest={false}
+      provider={PROVIDER_GOOGLE}
     >
       {lots
         ? lots.map((lot) => (
             <Marker
               id={`lot-marker-${lot.id}`}
-              tracksViewChanges={false}
               key={lot.id}
               coordinate={lot.location}
               onPress={(event) => handleLotMarkerPressed(event, lot)}
             />
           ))
-        : null}
+        : []}
     </MapView>
   );
 };
-
