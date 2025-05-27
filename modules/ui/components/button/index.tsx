@@ -2,7 +2,7 @@ import React from "react";
 import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
 type ButtonProps = TouchableOpacityProps & {
-  variant?: "primary" | "secondary" | "outline" | "secondary-outline";
+  variant?: "primary" | "secondary" | "outline" | "secondary-outline" | "negative";
   size?: "xs" | "sm" | "md" | "lg";
   label: string;
 };
@@ -21,6 +21,7 @@ const variantStyles: Record<Required<ButtonProps>["variant"], string> = {
   secondary: "bg-neutral-400",
   outline: "border border-primary-600",
   "secondary-outline": "border border-neutral-600",
+  negative: "bg-negative-600",
 };
 
 const textVariantStyles: Record<Required<ButtonProps>["variant"], string> = {
@@ -28,6 +29,7 @@ const textVariantStyles: Record<Required<ButtonProps>["variant"], string> = {
   secondary: "font-bold text-white",
   outline: "text-primary-600",
   "secondary-outline": "text-neutral-600",
+  negative: "font-bold text-white",
 };
 
 const textSizeStyles: Record<Required<ButtonProps>["size"], string> = {

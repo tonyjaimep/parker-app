@@ -4,7 +4,6 @@ import { Reservation } from "@/modules/reservations/types";
 import { useGetCurrentReservation } from "@/modules/reservations/hooks/use-get-current-reservation";
 import { Screen } from "@/modules/ui/components/screen";
 import { BodyText } from "@/modules/ui/components/text/body";
-import { View } from "react-native";
 import { Stack } from "expo-router";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 
@@ -32,4 +31,3 @@ export default function CurrentReservationDetailScreen() {
     </Screen>
   );
 }
-
