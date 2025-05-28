@@ -8,7 +8,6 @@ import { Stack } from "expo-router";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 
 const screenOptions: NativeStackNavigationOptions = {
-  headerShown: true,
   headerTitle: "",
 };
 

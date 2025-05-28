@@ -12,8 +12,9 @@ const AuthWidget = () => {
   const handlePress = () => {
     if (!isLoggedIn) {
       router.push('/auth'); // Navigate to auth screen if not logged in
+    } else {
+      router.push('/account'); // Navigate to account screen if logged in
     }
-    // If logged in, the ellipsis icon would likely open a menu or other actions
   };
 
   return (

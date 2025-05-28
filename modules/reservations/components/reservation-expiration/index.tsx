@@ -61,11 +61,9 @@ export const CurrentReservationExpiration = ({
   return (
     <View>
       <MicroTitleText>Expires in</MicroTitleText>
-      <View className="flex flex-row justify-between gap-4">
-        <BodyText className="mb-4">
-          {timeLeft} ({format(expiresAt, "MMM dd 'at' h:mm a")})
-        </BodyText>
-      </View>
+      <BodyText>
+        {timeLeft} ({format(expiresAt, "MMM dd 'at' h:mm a")})
+      </BodyText>
     </View>
   );
 };

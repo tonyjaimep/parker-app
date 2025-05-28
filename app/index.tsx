@@ -7,6 +7,7 @@ import { Screen } from "react-native-screens";
 import CurrentReservationWidget from "@/modules/reservations/components/current-reservation-widget";
 import AuthWidget from "@/modules/auth/components/AuthWidget";
 import { LotsMap } from "@/modules/lots/components/lots-map";
+import { Stack } from "expo-router";
 
 export default function HomeScreen() {
   const [selectedLot, setSelectedLot] = useState<LotWithAvailability>();
@@ -17,6 +18,7 @@ export default function HomeScreen() {
 
   return (
     <Screen style={styles.screen}>
+      <Stack.Screen options={{ headerShown: false }} />
       <LotsMap style={styles.map} onLotSelected={setSelectedLot} />
 
       <View className="pt-safe px-4 gap-4">
