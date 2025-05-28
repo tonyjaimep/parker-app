@@ -1,6 +1,17 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  ActivityIndicator, 
+  Alert, 
+  Platform, 
+  ActionSheetIOS,
+  AlertButton 
+} from "react-native";
 import { useRouter } from "expo-router";
+import * as Linking from 'expo-linking';
+
 import {
   useCurrentReservation,
   useIsLoadingCurrentReservation,
@@ -9,6 +20,25 @@ import { MiniTitleText } from "@/modules/ui/components/text/mini-title";
 import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
 import { BodyText } from "@/modules/ui/components/text/body";
 import { CurrentReservationExpiration } from "../reservation-expiration";
+import Button from "@/modules/ui/components/button";
+
+const NAVIGATION_APPS = [
+  ...(Platform.OS === 'ios' ? [{
+    id: 'apple',
+    name: 'Apple Maps',
+    url: (lat: number, lng: number) => `maps://?saddr=&daddr=${lat},${lng}&dirflg=d`
+  }] : []),
+  {
+    id: 'google',
+    name: 'Google Maps',
+    url: (lat: number, lng: number) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`
+  },
+  {
+    id: 'waze',
+    name: 'Waze',
+    url: (lat: number, lng: number) => `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`
+  }
+];
 
 const CurrentReservationWidget: React.FC = () => {
   const router = useRouter();
@@ -33,25 +63,87 @@ const CurrentReservationWidget: React.FC = () => {
     return null;
   }
 
+  const showNavigationOptions = () => {
+    if (!currentReservation?.lot?.location) {
+      Alert.alert('Error', 'Location information is not available for this parking lot.');
+      return;
+    }
+
+    const { latitude, longitude } = currentReservation.lot.location;
+
+    // For iOS, use ActionSheetIOS
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: [...NAVIGATION_APPS.map(app => app.name), 'Cancel'],
+          cancelButtonIndex: NAVIGATION_APPS.length,
+          title: 'Choose Navigation App',
+        },
+        async (buttonIndex) => {
+          if (buttonIndex < NAVIGATION_APPS.length) {
+            const url = NAVIGATION_APPS[buttonIndex].url(latitude, longitude);
+            try {
+              await Linking.openURL(url);
+            } catch (error) {
+              console.error('Error opening navigation app:', error);
+              Alert.alert('Error', 'Could not open the selected navigation app.');
+            }
+          }
+        },
+      );
+    } else {
+      // For Android, use a simple Alert with options
+      const buttons: AlertButton[] = [
+        ...NAVIGATION_APPS.map((app) => ({
+          text: app.name,
+          onPress: async () => {
+            try {
+              const url = app.url(latitude, longitude);
+              await Linking.openURL(url);
+            } catch (error) {
+              console.error('Error opening navigation app:', error);
+              Alert.alert('Error', 'Could not open the selected navigation app.');
+            }
+          }
+        })),
+        {
+          text: 'Cancel',
+          style: 'cancel' as const,
+        },
+      ];
+
+      Alert.alert('Choose Navigation App', '', buttons, { cancelable: true });
+    }
+  };
+
   return (
-    <TouchableOpacity
-      onPress={handlePress}
-      className="bg-neutral-100 p-4 rounded-xl shadow-md"
-    >
-      <MicroTitleText className="mb-2">Active Reservation</MicroTitleText>
-      {currentReservation.expiresAt ? (
-        <CurrentReservationExpiration
-          expiresAt={currentReservation.expiresAt}
+    <View>
+      <TouchableOpacity
+        onPress={handlePress}
+        className="bg-neutral-100 p-4 rounded-xl shadow-md"
+      >
+        <View className="flex flex-row justify-between">
+          <MicroTitleText className="mb-2">Active Reservation</MicroTitleText>
+          <Text className="text-sm text-neutral-800">Tap to view details</Text>
+        </View>
+        {currentReservation.expiresAt ? (
+          <CurrentReservationExpiration
+            expiresAt={currentReservation.expiresAt}
+          />
+        ) : null}
+        <View>
+          <MiniTitleText>{currentReservation.lot.address}</MiniTitleText>
+          <BodyText>{currentReservation.lot.name}</BodyText>
+        </View>
+      </TouchableOpacity>
+      {currentReservation.lot?.location ? (
+        <Button 
+          label="Get directions" 
+          className="mt-2" 
+          onPress={showNavigationOptions}
         />
       ) : null}
-      <View className="mb-2">
-        <MiniTitleText>{currentReservation.lot.address}</MiniTitleText>
-        <BodyText>{currentReservation.lot.name}</BodyText>
-      </View>
-      <Text className="text-sm text-center font-medium">
-        Tap to view details
-      </Text>
-    </TouchableOpacity>
+    </View>
   );
 };
 
