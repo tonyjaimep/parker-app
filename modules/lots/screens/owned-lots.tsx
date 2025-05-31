@@ -1,13 +1,21 @@
-import React, { useState } from "react";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import React, { useCallback, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import { AxiosResponse } from "axios";
 import { Lot } from "../types";
 import Button from "@/modules/ui/components/button";
 import { useOwnedLots } from "../hooks/use-owned-lots";
-import { AxiosResponse } from "axios";
+import { BodyText } from "@/modules/ui/components/text/body";
+import { useRouter } from "expo-router";
 
 const RegisterLotCta = () => {
   return (
-    <View>
+    <View className="pt-4">
       <Button label="Add Lot" onPress={() => {}} />
     </View>
   );
@@ -17,17 +25,35 @@ const Header = () => {
   return <RegisterLotCta />;
 };
 
-const renderLotItem = ({ item }: { item: Lot }) => (
-  <View className="p-4 border-b border-neutral-300">
-    <Text className="text-lg font-semibold">{item.name}</Text>
-    {item.address && <Text className="text-neutral-600">{item.address}</Text>}
-  </View>
-);
+const LotItem = ({ lot }: { lot: Lot }) => {
+  const router = useRouter();
+
+  const onPress = () => {
+    router.navigate(`/account/lots/${lot.id}/edit`);
+  };
+
+  return (
+    <TouchableOpacity
+      className="p-4 border-b border-neutral-300"
+      onPress={onPress}
+    >
+      <Text className="text-lg font-semibold">{lot.name}</Text>
+      {lot.address && <Text className="text-neutral-600">{lot.address}</Text>}
+    </TouchableOpacity>
+  );
+};
+
+const renderLotItem = ({ item }: { item: Lot }) => <LotItem lot={item} />;
+
+const ownedLotsQueryParams = { withAvailability: true };
 
 const OwnedLotsScreen = () => {
   const [error, setError] = useState<AxiosResponse>();
 
-  const { ownedLots, isLoading, refresh } = useOwnedLots({ onError: setError });
+  const { ownedLots, isLoading, refresh } = useOwnedLots({
+    onError: setError,
+    params: ownedLotsQueryParams,
+  });
 
   if (isLoading) {
     return (
@@ -48,26 +74,17 @@ const OwnedLotsScreen = () => {
     );
   }
 
-  if (!ownedLots || ownedLots.length === 0) {
-    return (
-      <View className="flex-1 justify-center items-center p-4">
-        <Text className="text-neutral-500 text-center">
-          You do not own any lots.
-        </Text>
-        <RegisterLotCta />
-      </View>
-    );
-  }
-
   return (
     <FlatList
       data={ownedLots}
       renderItem={renderLotItem}
       keyExtractor={(item: Lot): string => String(item.id)}
+      refreshing={isLoading}
+      onRefresh={refresh}
       ListHeaderComponent={Header}
       ListEmptyComponent={() => (
-        <View className="flex-1 justify-center items-center">
-          <Text>No lots found.</Text>
+        <View className="flex-1 justify-center items-center mt-8">
+          <BodyText>No lots found.</BodyText>
         </View>
       )}
     />

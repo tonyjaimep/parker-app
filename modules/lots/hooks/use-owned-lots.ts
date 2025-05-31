@@ -5,6 +5,8 @@ import {
 import { Lot } from "../types";
 
 export const useOwnedLots = (options: BffQueryOptions) => {
+  console.log("yeah called");
+
   const {
     result: ownedLots,
     isLoading,
