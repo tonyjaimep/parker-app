@@ -8,8 +8,16 @@ export type Reservation = {
   checkInAt: string | null;
   checkOutAt: string | null;
   lot: Lot;
+  status: ReservationStatus;
 };
 
 export type ReservationCreateDto = {
   lotId: number;
 };
+
+export type ReservationStatus =
+  | "pending"
+  | "active"
+  | "completed"
+  | "cancelled"
+  | "expired";
