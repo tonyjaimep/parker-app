@@ -80,7 +80,7 @@ export const AuthContextProvider = ({
   const loadAuth = useCallback(async () => {
     const token = await AsyncStorage.getItem(ASYNC_STORAGE_TOKEN_KEY);
 
-    console.log("token", token)
+    console.log("token", token);
 
     if (token) {
       try {
@@ -159,6 +159,23 @@ export const AuthContextProvider = ({
     }),
     [user, signOut, setAccountData],
   );
+
+  useEffect(() => {
+    const tokenRefresher = bffClient.interceptors.request.use(async (config) => {
+      const user = auth().currentUser;
+
+      if (user) {
+        const idToken = await user.getIdToken(true)
+        handleFirebaseTokenChange(idToken)
+      }
+
+      return config
+    })
+
+    return () => {
+      bffClient.interceptors.request.eject(tokenRefresher)
+    }
+  }, [bffClient])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
