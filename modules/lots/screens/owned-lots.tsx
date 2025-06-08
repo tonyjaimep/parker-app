@@ -14,9 +14,15 @@ import { BodyText } from "@/modules/ui/components/text/body";
 import { useRouter } from "expo-router";
 
 const RegisterLotCta = () => {
+  const router = useRouter();
+
+  const navigateToLotForm = () => {
+    router.navigate("/account/lots/register");
+  };
+
   return (
     <View className="pt-4">
-      <Button label="Add Lot" onPress={() => {}} />
+      <Button label="Add Lot" onPress={navigateToLotForm} />
     </View>
   );
 };

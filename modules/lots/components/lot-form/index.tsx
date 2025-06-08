@@ -22,7 +22,7 @@ const lotFormFields = {
     type: FormFieldType.Text,
     title: "Spots count",
   },
-} as FormFields;
+} as const;
 
 type LotFormProps = {
   onSubmit: (values: FormValues<typeof lotFormFields>) => Promise<void>;

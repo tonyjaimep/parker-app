@@ -11,3 +11,15 @@ export type Lot = {
 export type LotWithAvailability = Lot & {
   availability: number;
 };
+
+export type CreateLotRequestDto = {
+  name: string;
+  address: string;
+  location: Coordinates;
+  spotsCount: number;
+};
+
+export type Coordinates = {
+  latitude: number;
+  longitude: number;
+};
