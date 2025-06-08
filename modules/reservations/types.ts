@@ -9,6 +9,7 @@ export type Reservation = {
   checkOutAt: string | null;
   lot: Lot;
   status: ReservationStatus;
+  spotId: number;
 };
 
 export type ReservationCreateDto = {

@@ -65,6 +65,8 @@ const ReservationDetail: React.FC<ReservationDetailProps> = ({
     );
   }, [reservation.id, router]);
 
+  const canCancel = reservation.status === "pending";
+
   if (!reservation || !reservation.lot) {
     return <BodyText>Reservation data or lot details not available.</BodyText>;
   }
@@ -76,20 +78,29 @@ const ReservationDetail: React.FC<ReservationDetailProps> = ({
       <MicroTitleText className="mb-2">
         Lot Address: {reservation.lot.address}
       </MicroTitleText>
+      <MicroTitleText className="mb-2">
+        Reserved Spot ID: {reservation.spotId}
+      </MicroTitleText>
       {reservation.expiresAt ? (
         <CurrentReservationExpiration expiresAt={reservation.expiresAt} />
       ) : null}
       <ReservationStatus status={reservation.status} className="my-2" />
       {canCheckIn ? (
-        <Button onPress={() => onCheckInPressed()} label="Check In" />
+        <Button
+          onPress={() => onCheckInPressed()}
+          disabled={isCheckingIn}
+          label="Check In"
+        />
       ) : null}
-      <Button
-        variant="negative"
-        onPress={() => cancelReservation()}
-        disabled={isCancelingReservation}
-        label="Cancel Reservation"
-        className="mt-32 rounded-full"
-      />
+      {canCancel ? (
+        <Button
+          variant="negative"
+          onPress={() => cancelReservation()}
+          disabled={isCancelingReservation}
+          label="Cancel Reservation"
+          className="mt-32 rounded-full"
+        />
+      ) : null}
     </View>
   );
 };
