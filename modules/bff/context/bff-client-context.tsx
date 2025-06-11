@@ -4,6 +4,7 @@ import React, {
   useState,
   useMemo,
   PropsWithChildren,
+  useEffect,
 } from "react";
 import axios, { AxiosInstance } from "axios";
 
@@ -22,26 +23,34 @@ const BffClientContext = createContext<BffClientProviderState | undefined>(
 export const BffClientProvider = ({ children }: BffClientContextProps) => {
   const [jwt, setJwt] = useState<string | null>(null);
 
-  const bffClient = useMemo(() => {
-    const client = axios.create({
-      baseURL: process.env.EXPO_PUBLIC_BFF_BASE_URL,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
-      },
+  const bffClient = useMemo(
+    () =>
+      axios.create({
+        baseURL: process.env.EXPO_PUBLIC_BFF_BASE_URL,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }),
+    [],
+  );
+
+  useEffect(() => {
+    const jwtInterceptor = bffClient.interceptors.request.use((config) => {
+      if (jwt) {
+        config.headers.Authorization = `Bearer ${jwt}`;
+      }
+      return config;
     });
 
-    return client;
-  }, [jwt]);
+    return () => {
+      bffClient.interceptors.request.eject(jwtInterceptor);
+    };
+  }, [bffClient, jwt]);
 
   const value = useMemo(
-    () => ({
-      bffClient,
-      jwt,
-      setJwt,
-    }),
-    [bffClient, jwt],
+    () => ({ bffClient, jwt, setJwt }),
+    [bffClient, jwt, setJwt],
   );
 
   return (
