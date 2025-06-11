@@ -1,17 +1,12 @@
 import React, { useCallback, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-} from "react-native";
-import { AxiosResponse } from "axios";
+import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
+import { AxiosError, AxiosResponse } from "axios";
 import { Lot } from "../types";
 import Button from "@/modules/ui/components/button";
 import { useOwnedLots } from "../hooks/use-owned-lots";
 import { BodyText } from "@/modules/ui/components/text/body";
 import { useRouter } from "expo-router";
+import { Screen } from "@/modules/ui/components/screen";
 
 const RegisterLotCta = () => {
   const router = useRouter();
@@ -53,10 +48,15 @@ const renderLotItem = ({ item }: { item: Lot }) => <LotItem lot={item} />;
 
 const ownedLotsQueryParams = { withAvailability: true };
 
-const OwnedLotsScreen = () => {
-  const [error, setError] = useState<AxiosResponse>();
+export const OwnedLotsScreen = () => {
+  const [error, setError] = useState<AxiosError>();
+
+  const onLotsRetrieved = useCallback(() => {
+    setError(undefined);
+  }, []);
 
   const { ownedLots, isLoading, refresh } = useOwnedLots({
+    onSuccess: onLotsRetrieved,
     onError: setError,
     params: ownedLotsQueryParams,
   });
@@ -72,8 +72,8 @@ const OwnedLotsScreen = () => {
   if (error) {
     return (
       <View className="flex-1 justify-center items-center p-4">
-        <Text className="text-red-500 text-center mb-4">
-          Error fetching lots: {error.data}
+        <Text className="text-negative-800 text-center mb-4">
+          Error fetching lots - {error.message}
         </Text>
         <Button label="Try Again" onPress={refresh} />
       </View>
@@ -81,7 +81,8 @@ const OwnedLotsScreen = () => {
   }
 
   return (
-    <FlatList
+    <Screen
+      list={true}
       data={ownedLots}
       renderItem={renderLotItem}
       keyExtractor={(item: Lot): string => String(item.id)}
@@ -96,5 +97,3 @@ const OwnedLotsScreen = () => {
     />
   );
 };
-
-export default OwnedLotsScreen;
