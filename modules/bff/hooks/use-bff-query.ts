@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useBffClient } from "../../bff/context/bff-client-context";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 
 export type BffQueryOptions = {
-  onError?: (response: AxiosResponse) => void;
+  onError?: (error?: AxiosError) => void;
   onSuccess?: (response: AxiosResponse) => unknown;
   params?: Record<string, unknown>;
 };
@@ -23,17 +23,23 @@ export const useBffQuery = <R = unknown>(
   const [result, setResult] = useState<R | null>(null);
 
   const fetchResult = useCallback(async () => {
+    let message = `[GET ${url}]`;
+
     try {
       setIsLoading(true);
       const response = await bffClient.get(url, { params });
 
-      if (response.status !== 200) {
-        onError?.(response);
-      } else {
-        onSuccess?.(response);
-      }
+      console.log(`[${response.status}] [GET ${url}] - ${message}`);
+      onSuccess?.(response);
 
       setResult(response.data);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.error(`[${error.status}] [GET ${url}] - ${error.message}`);
+        onError?.(error);
+      } else {
+        console.error(`[${error}] [GET ${url}] - ${error}`);
+      }
     } finally {
       setIsLoading(false);
     }
