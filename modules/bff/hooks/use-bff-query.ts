@@ -23,22 +23,16 @@ export const useBffQuery = <R = unknown>(
   const [result, setResult] = useState<R | null>(null);
 
   const fetchResult = useCallback(async () => {
-    let message = `[GET ${url}]`;
-
     try {
       setIsLoading(true);
       const response = await bffClient.get(url, { params });
 
-      console.log(`[${response.status}] [GET ${url}] - ${message}`);
       onSuccess?.(response);
 
       setResult(response.data);
     } catch (error) {
       if (isAxiosError(error)) {
-        console.error(`[${error.status}] [GET ${url}] - ${error.message}`);
         onError?.(error);
-      } else {
-        console.error(`[${error}] [GET ${url}] - ${error}`);
       }
     } finally {
       setIsLoading(false);

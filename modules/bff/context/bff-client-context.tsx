@@ -23,17 +23,54 @@ const BffClientContext = createContext<BffClientProviderState | undefined>(
 export const BffClientProvider = ({ children }: BffClientContextProps) => {
   const [jwt, setJwt] = useState<string | null>(null);
 
-  const bffClient = useMemo(
-    () =>
-      axios.create({
-        baseURL: process.env.EXPO_PUBLIC_BFF_BASE_URL,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }),
-    [],
-  );
+  const bffClient = useMemo(() => {
+    const client = axios.create({
+      baseURL: process.env.EXPO_PUBLIC_BFF_BASE_URL,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    client.interceptors.response.use(
+      (response) => {
+        const { status, config } = response;
+        const method = config.method?.toUpperCase();
+        const url = config.url;
+
+        console.log(`[${status}] [${method} ${url}]`);
+
+        return response;
+      },
+      (error) => {
+        // Handle error responses
+        if (error.response) {
+          // Server responded with error status
+          const { status, config, statusText } = error.response;
+          const method = config?.method?.toUpperCase();
+          const url = config?.url;
+
+          console.log(
+            `[${status}] [${method} ${url}] | ${statusText || error.message}`,
+          );
+        } else if (error.request) {
+          // Request was made but no response received
+          const { config } = error;
+          const method = config?.method?.toUpperCase();
+          const url = config?.url;
+
+          console.log(`[NETWORK ERROR] [${method} ${url}] | ${error.message}`);
+        } else {
+          // Something else happened
+          console.log(`[REQUEST ERROR] | ${error.message}`);
+        }
+
+        return Promise.reject(error);
+      },
+    );
+
+    return client;
+  }, []);
 
   useEffect(() => {
     const jwtInterceptor = bffClient.interceptors.request.use((config) => {
