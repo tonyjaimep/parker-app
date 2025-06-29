@@ -2,6 +2,7 @@ import { ExpoConfig, ConfigContext } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
+  jsEngine: "hermes",
   name: "Parker",
   slug: "parker-app",
   version: "1.0.0",
@@ -15,22 +16,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundleIdentifier: "com.anonymous.parker-app",
     googleServicesFile: "./assets/firebase/GoogleService-Info.plist",
     config: {
-      googleMapsApiKey: process.env.GOOGLE_MAPS_IOS_API_KEY,
       usesNonExemptEncryption: false,
     },
+    newArchEnabled: true,
   },
   android: {
+    edgeToEdgeEnabled: true,
+    newArchEnabled: true,
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
     package: "com.anonymous.parkerapp",
     googleServicesFile: "./assets/firebase/google-services.json",
-    config: {
-      googleMaps: {
-        apiKey: process.env.GOOGLE_MAPS_ANDROID_API_KEY,
-      },
-    },
   },
   web: {
     bundler: "metro",
@@ -56,6 +54,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ios: {
           useFrameworks: "static",
         },
+      },
+    ],
+    [
+      "react-native-maps",
+      {
+        iosGoogleMapsApiKey: process.env.GOOGLE_MAPS_IOS_API_KEY,
+        androidGoogleMapsApiKey: process.env.GOOGLE_MAPS_ANDROID_API_KEY,
       },
     ],
   ],
