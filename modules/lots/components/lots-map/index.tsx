@@ -6,7 +6,7 @@ import MapView, {
 import { useCallback, useEffect, useRef } from "react";
 import { LotWithAvailability } from "../../types";
 import { useGetLotsWithAvailability } from "../../hooks/use-get-lots-with-availability";
-import { throttle } from "lodash";
+import { debounce } from "lodash";
 
 export const LotsMap = ({
   style,
@@ -20,7 +20,7 @@ export const LotsMap = ({
   const mapRef = useRef<MapView>(null);
 
   const throttledGetLotsWithAvailability = useCallback(
-    throttle(async (boundaries: any) => {
+    debounce(async (boundaries: any) => {
       getLotsWithAvailability(boundaries);
     }, 500),
     [getLotsWithAvailability],
@@ -55,6 +55,8 @@ export const LotsMap = ({
     [],
   );
 
+  console.log(lots?.map((lot) => lot.location));
+
   return (
     <MapView
       ref={mapRef}
@@ -69,14 +71,16 @@ export const LotsMap = ({
       provider={PROVIDER_GOOGLE}
     >
       {lots
-        ? lots.map((lot) => (
-            <Marker
-              id={`lot-marker-${lot.id}`}
-              key={lot.id}
-              coordinate={lot.location}
-              onPress={(event) => handleLotMarkerPressed(event, lot)}
-            />
-          ))
+        ? lots.map((lot) =>
+            lot.location ? (
+              <Marker
+                id={`lot-marker-${lot.id}`}
+                key={lot.id}
+                coordinate={lot.location}
+                onPress={(event) => handleLotMarkerPressed(event, lot)}
+              />
+            ) : null,
+          )
         : []}
     </MapView>
   );

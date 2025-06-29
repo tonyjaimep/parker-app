@@ -1,6 +1,5 @@
 import { LotForm } from "@/modules/lots/components/lot-form";
 import { useCreateLot } from "@/modules/lots/hooks/use-create-lot";
-import { CreateLotRequestDto } from "@/modules/lots/types";
 import { Screen } from "@/modules/ui/components/screen";
 import { TitleText } from "@/modules/ui/components/text/title";
 import { useRouter } from "expo-router";

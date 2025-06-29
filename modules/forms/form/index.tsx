@@ -60,7 +60,7 @@ export const Form = <T extends FormFields = {}>({
         className="mt-4"
         // @ts-expect-error -- generic submit handlers are a problem
         onPress={handleSubmit(onSubmit)}
-        label="Guardar"
+        label="Save"
       />
     </View>
   );

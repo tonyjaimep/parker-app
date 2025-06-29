@@ -6,6 +6,7 @@ export type Lot = {
     latitude: number;
     longitude: number;
   };
+  spotsCount?: number;
 };
 
 export type LotWithAvailability = Lot & {
