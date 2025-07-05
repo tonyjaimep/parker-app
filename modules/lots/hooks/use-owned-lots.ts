@@ -4,7 +4,7 @@ import {
 } from "@/modules/bff/hooks/use-bff-query";
 import { Lot } from "../types";
 
-export const useOwnedLots = (options: BffQueryOptions) => {
+export const useOwnedLots = (options?: BffQueryOptions) => {
   const {
     result: ownedLots,
     isLoading,

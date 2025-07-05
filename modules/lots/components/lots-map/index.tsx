@@ -55,8 +55,6 @@ export const LotsMap = ({
     [],
   );
 
-  console.log(lots?.map((lot) => lot.location));
-
   return (
     <MapView
       ref={mapRef}
@@ -66,8 +64,6 @@ export const LotsMap = ({
       pitchEnabled={false}
       showsBuildings={false}
       onRegionChangeComplete={handleRegionChange}
-      showsTraffic={false}
-      showsPointsOfInterest={false}
       provider={PROVIDER_GOOGLE}
     >
       {lots
