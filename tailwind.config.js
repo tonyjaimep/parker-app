@@ -11,6 +11,8 @@ module.exports = {
       neutral: colors.slate,
       primary: colors.blue,
       negative: colors.rose,
+      positive: colors.green,
+      attention: colors.amber,
       white: "#ffffff",
       black: "#000000",
     },
