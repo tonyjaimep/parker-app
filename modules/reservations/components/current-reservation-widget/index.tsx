@@ -1,18 +1,19 @@
-import React from "react";
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  ActivityIndicator, 
-  Alert, 
-  Platform, 
+import React, { useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+  Platform,
   ActionSheetIOS,
-  AlertButton 
+  AlertButton,
 } from "react-native";
 import { useRouter } from "expo-router";
-import * as Linking from 'expo-linking';
+import * as Linking from "expo-linking";
 
 import {
+  useCheckForReservation,
   useCurrentReservation,
   useIsLoadingCurrentReservation,
 } from "../../context";
@@ -23,27 +24,39 @@ import { CurrentReservationExpiration } from "../reservation-expiration";
 import Button from "@/modules/ui/components/button";
 
 const NAVIGATION_APPS = [
-  ...(Platform.OS === 'ios' ? [{
-    id: 'apple',
-    name: 'Apple Maps',
-    url: (lat: number, lng: number) => `maps://?saddr=&daddr=${lat},${lng}&dirflg=d`
-  }] : []),
+  ...(Platform.OS === "ios"
+    ? [
+        {
+          id: "apple",
+          name: "Apple Maps",
+          url: (lat: number, lng: number) =>
+            `maps://?saddr=&daddr=${lat},${lng}&dirflg=d`,
+        },
+      ]
+    : []),
   {
-    id: 'google',
-    name: 'Google Maps',
-    url: (lat: number, lng: number) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`
+    id: "google",
+    name: "Google Maps",
+    url: (lat: number, lng: number) =>
+      `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`,
   },
   {
-    id: 'waze',
-    name: 'Waze',
-    url: (lat: number, lng: number) => `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`
-  }
+    id: "waze",
+    name: "Waze",
+    url: (lat: number, lng: number) =>
+      `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`,
+  },
 ];
 
 const CurrentReservationWidget: React.FC = () => {
   const router = useRouter();
   const currentReservation = useCurrentReservation();
   const isLoading = useIsLoadingCurrentReservation();
+  const checkForCurrentReservation = useCheckForReservation();
+
+  useEffect(() => {
+    checkForCurrentReservation();
+  }, [checkForCurrentReservation]);
 
   const handlePress = () => {
     if (currentReservation) {
@@ -65,19 +78,22 @@ const CurrentReservationWidget: React.FC = () => {
 
   const showNavigationOptions = () => {
     if (!currentReservation?.lot?.location) {
-      Alert.alert('Error', 'Location information is not available for this parking lot.');
+      Alert.alert(
+        "Error",
+        "Location information is not available for this parking lot.",
+      );
       return;
     }
 
     const { latitude, longitude } = currentReservation.lot.location;
 
     // For iOS, use ActionSheetIOS
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: [...NAVIGATION_APPS.map(app => app.name), 'Cancel'],
+          options: [...NAVIGATION_APPS.map((app) => app.name), "Cancel"],
           cancelButtonIndex: NAVIGATION_APPS.length,
-          title: 'Choose Navigation App',
+          title: "Choose Navigation App",
         },
         async (buttonIndex) => {
           if (buttonIndex < NAVIGATION_APPS.length) {
@@ -85,8 +101,11 @@ const CurrentReservationWidget: React.FC = () => {
             try {
               await Linking.openURL(url);
             } catch (error) {
-              console.error('Error opening navigation app:', error);
-              Alert.alert('Error', 'Could not open the selected navigation app.');
+              console.error("Error opening navigation app:", error);
+              Alert.alert(
+                "Error",
+                "Could not open the selected navigation app.",
+              );
             }
           }
         },
@@ -101,18 +120,21 @@ const CurrentReservationWidget: React.FC = () => {
               const url = app.url(latitude, longitude);
               await Linking.openURL(url);
             } catch (error) {
-              console.error('Error opening navigation app:', error);
-              Alert.alert('Error', 'Could not open the selected navigation app.');
+              console.error("Error opening navigation app:", error);
+              Alert.alert(
+                "Error",
+                "Could not open the selected navigation app.",
+              );
             }
-          }
+          },
         })),
         {
-          text: 'Cancel',
-          style: 'cancel' as const,
+          text: "Cancel",
+          style: "cancel" as const,
         },
       ];
 
-      Alert.alert('Choose Navigation App', '', buttons, { cancelable: true });
+      Alert.alert("Choose Navigation App", "", buttons, { cancelable: true });
     }
   };
 
@@ -137,9 +159,9 @@ const CurrentReservationWidget: React.FC = () => {
         </View>
       </TouchableOpacity>
       {currentReservation.lot?.location ? (
-        <Button 
-          label="Get directions" 
-          className="mt-2" 
+        <Button
+          label="Get directions"
+          className="mt-2"
           onPress={showNavigationOptions}
         />
       ) : null}
