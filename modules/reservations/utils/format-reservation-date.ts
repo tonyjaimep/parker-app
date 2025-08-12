@@ -5,7 +5,7 @@ export const formatReservationDate = (timestamp: Date): string => {
   let result = format(timestamp, "HH:mm");
 
   if (shouldAddDay) {
-    result = `${format(timestamp, "D")}, ${result}`;
+    result = `${format(timestamp, "d")}, ${result}`;
   }
 
   return result;

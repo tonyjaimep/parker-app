@@ -22,3 +22,8 @@ export type ReservationStatus =
   | "completed"
   | "cancelled"
   | "expired";
+
+export type ReservationActionType =
+  | "check-in"
+  | "check-out"
+  | "cancel";

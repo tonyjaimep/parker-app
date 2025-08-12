@@ -1,8 +1,15 @@
 import React from "react";
 import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "secondary-outline"
+  | "negative";
+
 type ButtonProps = TouchableOpacityProps & {
-  variant?: "primary" | "secondary" | "outline" | "secondary-outline" | "negative";
+  variant?: ButtonVariant;
   size?: "xs" | "sm" | "md" | "lg";
   label: string;
 };

@@ -1,12 +1,11 @@
+import { ReservationActions } from "@/modules/reservations/components/reservation-actions";
 import { ReservationStatusBadge } from "@/modules/reservations/components/reservation-thumbnail/status";
 import { useReservation } from "@/modules/reservations/hooks/use-reservation";
 import { Countdown } from "@/modules/time/components/countdown";
 import { Screen } from "@/modules/ui/components/screen";
 import { BodyText } from "@/modules/ui/components/text/body";
 import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
-import { MiniTitleText } from "@/modules/ui/components/text/mini-title";
 import { TitleText } from "@/modules/ui/components/text/title";
-import { formatDurationToNow } from "@/modules/utils/functions/format-duration-to-now";
 import { format, formatDistanceToNow } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
@@ -65,6 +64,16 @@ export default function ReservationDetail() {
               />
             </View>
           ) : null}
+          {reservation.status === "active" && reservation.checkInAt ? (
+            <View className="gap-2">
+              <MicroTitleText>Tiempo Transcurrido</MicroTitleText>
+              <Countdown
+                targetDate={reservation.checkInAt}
+                className="font-bold text-6xl"
+              />
+            </View>
+          ) : null}
+          <ReservationActions id={parsedId} />
         </View>
       ) : null}
     </Screen>
