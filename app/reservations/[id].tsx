@@ -5,8 +5,9 @@ import { Countdown } from "@/modules/time/components/countdown";
 import { Screen } from "@/modules/ui/components/screen";
 import { BodyText } from "@/modules/ui/components/text/body";
 import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
+import { MiniTitleText } from "@/modules/ui/components/text/mini-title";
 import { TitleText } from "@/modules/ui/components/text/title";
-import { format, formatDistanceToNow } from "date-fns";
+import { format, formatDistance, formatDistanceToNow } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
@@ -66,11 +67,39 @@ export default function ReservationDetail() {
           ) : null}
           {reservation.status === "active" && reservation.checkInAt ? (
             <View className="gap-2">
-              <MicroTitleText>Tiempo Transcurrido</MicroTitleText>
+              <MicroTitleText>Time</MicroTitleText>
               <Countdown
                 targetDate={reservation.checkInAt}
                 className="font-bold text-6xl"
               />
+            </View>
+          ) : null}
+          {reservation.checkInAt && reservation.checkOutAt ? (
+            <View>
+              <MiniTitleText>Total Time</MiniTitleText>
+              <View className="gap-2">
+                <BodyText>
+                  {formatDistance(
+                    reservation.checkOutAt,
+                    reservation.checkInAt,
+                  )}
+                </BodyText>
+                <View>
+                  <MicroTitleText>Check In</MicroTitleText>
+                  <BodyText>
+                    {format(reservation.checkInAt, "MMMM do, yyyy 'at' h:mm a")}
+                  </BodyText>
+                </View>
+                <View>
+                  <MicroTitleText>Check Out</MicroTitleText>
+                  <BodyText>
+                    {format(
+                      reservation.checkOutAt,
+                      "MMMM do, yyyy 'at' h:mm a",
+                    )}
+                  </BodyText>
+                </View>
+              </View>
             </View>
           ) : null}
           <ReservationActions id={parsedId} />
