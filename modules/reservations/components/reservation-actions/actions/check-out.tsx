@@ -7,20 +7,15 @@ type CheckOutActionProps = BaseReservationActionProps & {
 };
 
 export const CheckOutAction = ({
-  onPress,
+  onPerform,
   reservationId,
 }: CheckOutActionProps) => {
-  const { checkOut } = useCheckOut(reservationId);
-
-  const perform = () => {
-    onPress();
-    checkOut();
-  };
+  const { checkOut } = useCheckOut(reservationId, { onSuccess: onPerform });
 
   return (
     <ReservationActionBase
-      variant="negative"
-      perform={perform}
+      variant="outline"
+      perform={checkOut}
       label="Check Out"
     />
   );

@@ -6,7 +6,8 @@ export type ButtonVariant =
   | "secondary"
   | "outline"
   | "secondary-outline"
-  | "negative";
+  | "negative"
+  | "negative-outline";
 
 type ButtonProps = TouchableOpacityProps & {
   variant?: ButtonVariant;
@@ -29,6 +30,7 @@ const variantStyles: Record<Required<ButtonProps>["variant"], string> = {
   outline: "border border-primary-600",
   "secondary-outline": "border border-neutral-600",
   negative: "bg-negative-600",
+  "negative-outline": "border border-negative-600",
 };
 
 const textVariantStyles: Record<Required<ButtonProps>["variant"], string> = {
@@ -37,6 +39,7 @@ const textVariantStyles: Record<Required<ButtonProps>["variant"], string> = {
   outline: "text-primary-600",
   "secondary-outline": "text-neutral-600",
   negative: "font-bold text-white",
+  "negative-outline": "font-bold text-negative-600",
 };
 
 const textSizeStyles: Record<Required<ButtonProps>["size"], string> = {

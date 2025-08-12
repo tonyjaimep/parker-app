@@ -4,34 +4,35 @@ import { memo } from "react";
 import { BaseReservationActionProps } from "./types";
 import { Alert } from "react-native";
 
-export const CheckInAction = memo(({ onPress }: BaseReservationActionProps) => {
-  const { checkIn } = useCheckIn();
+export const CheckInAction = memo(
+  ({ onPerform }: BaseReservationActionProps) => {
+    const { checkIn } = useCheckIn({ onSuccess: onPerform });
 
-  const perform = () => {
-    Alert.alert(
-      "Check In",
-      "Pressing 'Check In' will start the parking meter",
-      [
-        {
-          text: "Check In",
-          onPress: () => {
-            checkIn();
-            onPress();
+    const perform = () => {
+      Alert.alert(
+        "Check In",
+        "Pressing 'Check In' will start the parking meter",
+        [
+          {
+            text: "Check In",
+            onPress: () => {
+              checkIn();
+            },
           },
-        },
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-      ],
-    );
-  };
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ],
+      );
+    };
 
-  return (
-    <ReservationActionBase
-      variant="negative"
-      perform={perform}
-      label="Check Out"
-    />
-  );
-});
+    return (
+      <ReservationActionBase
+        variant="primary"
+        perform={perform}
+        label="Check In"
+      />
+    );
+  },
+);

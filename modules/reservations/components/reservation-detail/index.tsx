@@ -1,15 +1,11 @@
-import React, { useCallback, useMemo } from "react";
+import React from "react";
 import { Reservation } from "../../types";
 import { BodyText } from "@/modules/ui/components/text/body";
 import { MiniTitleText } from "@/modules/ui/components/text/mini-title";
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 import { CurrentReservationExpiration } from "../reservation-expiration";
 import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
-import Button from "@/modules/ui/components/button";
-import { useCancelReservation } from "../../hooks/use-cancel-reservation";
 import { useCheckForReservation } from "../../context";
-import { useRouter } from "expo-router";
-import { useCheckIn } from "../../hooks/use-check-in";
 import { ReservationStatus } from "../reservation-status";
 import { ReservationActions } from "../reservation-actions";
 
@@ -20,36 +16,7 @@ interface ReservationDetailProps {
 const ReservationDetail: React.FC<ReservationDetailProps> = ({
   reservation,
 }) => {
-  const router = useRouter();
   const checkForReservation = useCheckForReservation();
-
-  const onCheckIn = useCallback(() => {
-    checkForReservation();
-  }, [checkForReservation]);
-
-  const { checkIn, isLoading: isCheckingIn } = useCheckIn({
-    onSuccess: onCheckIn,
-  });
-
-  const canCheckIn = useMemo(() => {
-    const isPending = reservation.status === "pending";
-    const isInCheckInRange = true;
-
-    return isPending && isInCheckInRange && !isCheckingIn;
-  }, [reservation, isCheckingIn]);
-
-  const onReservationCanceled = useCallback(async () => {
-    await checkForReservation();
-    router.back();
-  }, [checkForReservation, router]);
-
-  const { cancelReservation, isLoading: isCancelingReservation } =
-    useCancelReservation({
-      onSuccess: onReservationCanceled,
-      onError: console.log,
-    });
-
-  const canCancel = reservation.status === "pending";
 
   if (!reservation || !reservation.lot) {
     return <BodyText>Reservation data or lot details not available.</BodyText>;
@@ -69,8 +36,10 @@ const ReservationDetail: React.FC<ReservationDetailProps> = ({
         <CurrentReservationExpiration expiresAt={reservation.expiresAt} />
       ) : null}
       <ReservationStatus status={reservation.status} className="my-2" />
-      <ReservationActions id={reservation.id} />
-      ) : null}
+      <ReservationActions
+        id={reservation.id}
+        onActionPerformed={checkForReservation}
+      />
     </View>
   );
 };

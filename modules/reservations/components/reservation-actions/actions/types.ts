@@ -1,3 +1,3 @@
 export type BaseReservationActionProps = {
-  onPress: () => {};
+  onPerform: () => void;
 };
