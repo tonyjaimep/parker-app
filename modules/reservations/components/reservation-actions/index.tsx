@@ -19,7 +19,11 @@ export const ReservationActions = ({ id }: ReservationActionsProps) => {
   return (
     <View className="gap-2">
       {reservationActions.map((action) => (
-        <ReservationAction action={action} reservationId={id} />
+        <ReservationAction
+          action={action}
+          reservationId={id}
+          onPress={refresh}
+        />
       ))}
     </View>
   );
