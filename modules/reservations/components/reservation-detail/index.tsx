@@ -11,6 +11,7 @@ import { useCheckForReservation } from "../../context";
 import { useRouter } from "expo-router";
 import { useCheckIn } from "../../hooks/use-check-in";
 import { ReservationStatus } from "../reservation-status";
+import { ReservationActions } from "../reservation-actions";
 
 interface ReservationDetailProps {
   reservation: Reservation;
@@ -48,23 +49,6 @@ const ReservationDetail: React.FC<ReservationDetailProps> = ({
       onError: console.log,
     });
 
-  const onCheckInPressed = useCallback(async () => {
-    Alert.alert(
-      "Check In",
-      "Pressing 'Check In' will start the parking meter",
-      [
-        {
-          text: "Check In",
-          onPress: () => checkIn(),
-        },
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-      ],
-    );
-  }, [reservation.id, router]);
-
   const canCancel = reservation.status === "pending";
 
   if (!reservation || !reservation.lot) {
@@ -85,21 +69,7 @@ const ReservationDetail: React.FC<ReservationDetailProps> = ({
         <CurrentReservationExpiration expiresAt={reservation.expiresAt} />
       ) : null}
       <ReservationStatus status={reservation.status} className="my-2" />
-      {canCheckIn ? (
-        <Button
-          onPress={() => onCheckInPressed()}
-          disabled={isCheckingIn}
-          label="Check In"
-        />
-      ) : null}
-      {canCancel ? (
-        <Button
-          variant="negative"
-          onPress={() => cancelReservation()}
-          disabled={isCancelingReservation}
-          label="Cancel Reservation"
-          className="mt-32 rounded-full"
-        />
+      <ReservationActions id={reservation.id} />
       ) : null}
     </View>
   );
