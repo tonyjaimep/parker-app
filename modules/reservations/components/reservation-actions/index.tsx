@@ -30,6 +30,7 @@ export const ReservationActions = ({
     <View className="gap-2">
       {reservationActions.map((action) => (
         <ReservationAction
+          key={action}
           action={action}
           reservationId={id}
           onPerform={onPerform}

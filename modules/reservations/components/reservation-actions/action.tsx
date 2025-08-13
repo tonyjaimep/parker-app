@@ -1,7 +1,10 @@
 import { ReservationActionType } from "../../types";
 import { CancelAction } from "./actions/cancel";
 import { CheckInAction } from "./actions/check-in";
-import { CheckOutAction } from "./actions/check-out";
+import { ForceCheckOutAction } from "./actions/force-check-out";
+import { InitiateCheckOutAction } from "./actions/initiate-check-out";
+import { ConfirmCheckOutAction } from "./actions/confirm-check-out";
+import { DenyCheckOutAction } from "./actions/deny-check-out";
 
 type ReservationActionProps = {
   action: ReservationActionType;
@@ -17,9 +20,33 @@ export const ReservationAction = ({
   switch (action) {
     case "check-in":
       return <CheckInAction onPerform={onPerform} />;
-    case "check-out":
+    case "initiate-check-out":
       return (
-        <CheckOutAction reservationId={reservationId} onPerform={onPerform} />
+        <InitiateCheckOutAction
+          reservationId={reservationId}
+          onPerform={onPerform}
+        />
+      );
+    case "deny-check-out":
+      return (
+        <DenyCheckOutAction
+          reservationId={reservationId}
+          onPerform={onPerform}
+        />
+      );
+    case "confirm-check-out":
+      return (
+        <ConfirmCheckOutAction
+          reservationId={reservationId}
+          onPerform={onPerform}
+        />
+      );
+    case "force-check-out":
+      return (
+        <ForceCheckOutAction
+          reservationId={reservationId}
+          onPerform={onPerform}
+        />
       );
     case "cancel":
       return <CancelAction onPerform={onPerform} />;

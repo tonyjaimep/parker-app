@@ -19,11 +19,15 @@ export type ReservationCreateDto = {
 export type ReservationStatus =
   | "pending"
   | "active"
+  | "check-out-initiated"
   | "completed"
   | "cancelled"
   | "expired";
 
 export type ReservationActionType =
   | "check-in"
-  | "check-out"
+  | "initiate-check-out"
+  | "confirm-check-out"
+  | "deny-check-out"
+  | "force-check-out"
   | "cancel";

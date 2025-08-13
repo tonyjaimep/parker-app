@@ -6,6 +6,8 @@ import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
 const statusDescriptions: Record<ReservationStatusType, string> = {
   pending: "Arrive before the expiration time to check into your parking spot",
   active: "You're checked in. The parking meter is running.",
+  "check-out-initiated":
+    "Waiting for check-out confirmation from the lot owner.",
   completed: "Your parking reservation is complete. Thank you!",
   cancelled: "This parking reservation was cancelled.",
   expired: "You did not check in before the expiration time.",
