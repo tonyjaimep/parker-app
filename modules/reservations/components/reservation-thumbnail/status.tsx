@@ -20,6 +20,8 @@ export const ReservationStatusBadge = ({
         return "bg-negative-200";
       case "expired":
         return "bg-neutral-200";
+      case "check-out-initiated":
+        return "bg-primary-200";
     }
   }, [status]);
 
@@ -35,12 +37,31 @@ export const ReservationStatusBadge = ({
         return "text-negative-900";
       case "expired":
         return "text-neutral-900";
+      case "check-out-initiated":
+        return "text-primary-900";
     }
   }, [status]);
 
+  const statusText = useMemo(() => {
+    switch (status) {
+      case "pending":
+        return "Pendiente"
+      case "active":
+        return "Activa"
+      case "check-out-initiated":
+        return "Esperando confirmación de salida"
+      case "completed":
+        return "Completada"
+      case "cancelled":
+        return "Cancelada"
+      case "expired":
+        return "Expirada"
+    }
+  }, [status])
+
   return (
     <View className={`${containerClassName} px-2 py-1 rounded-full`}>
-      <MicroTitleText className={textClassName}>{status}</MicroTitleText>
+      <MicroTitleText className={textClassName}>{statusText}</MicroTitleText>
     </View>
   );
 };
