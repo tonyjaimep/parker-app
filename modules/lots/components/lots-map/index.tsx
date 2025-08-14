@@ -3,7 +3,7 @@ import MapView, {
   MarkerPressEvent,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LotWithAvailability } from "../../types";
 import { useGetLotsWithAvailability } from "../../hooks/use-get-lots-with-availability";
 import { debounce } from "lodash";
@@ -16,6 +16,7 @@ export const LotsMap = ({
   onLotSelected: (lot: any) => void;
 }) => {
   const { lots, getLotsWithAvailability } = useGetLotsWithAvailability();
+  const [isMapReady, setIsMapReady] = useState(false);
 
   const mapRef = useRef<MapView>(null);
 
@@ -27,20 +28,24 @@ export const LotsMap = ({
   );
 
   useEffect(() => {
+    if (!isMapReady) return;
+
     mapRef.current?.getMapBoundaries().then((boundaries) => {
       if (boundaries) {
         throttledGetLotsWithAvailability(boundaries);
       }
     });
-  }, [throttledGetLotsWithAvailability]);
+  }, [throttledGetLotsWithAvailability, isMapReady]);
 
   const handleRegionChange = useCallback(async () => {
+    if (!isMapReady) return;
+
     const boundaries = await mapRef.current?.getMapBoundaries();
 
     if (boundaries) {
       throttledGetLotsWithAvailability(boundaries);
     }
-  }, [getLotsWithAvailability]);
+  }, [getLotsWithAvailability, isMapReady]);
 
   const handleLotMarkerPressed = useCallback(
     async (event: MarkerPressEvent, lot: LotWithAvailability) => {
@@ -55,6 +60,10 @@ export const LotsMap = ({
     [],
   );
 
+  const handleMapReady = useCallback(() => {
+    setIsMapReady(true);
+  }, []);
+
   return (
     <MapView
       ref={mapRef}
@@ -65,6 +74,7 @@ export const LotsMap = ({
       showsBuildings={false}
       onRegionChangeComplete={handleRegionChange}
       provider={PROVIDER_GOOGLE}
+      onMapReady={handleMapReady}
     >
       {lots
         ? lots.map((lot) =>
