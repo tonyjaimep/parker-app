@@ -21,7 +21,7 @@ export type ReservationStatus =
   | "active"
   | "check-out-initiated"
   | "completed"
-  | "cancelled"
+  | "canceled"
   | "expired";
 
 export type ReservationActionType =

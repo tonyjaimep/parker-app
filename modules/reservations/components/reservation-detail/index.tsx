@@ -8,6 +8,7 @@ import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
 import { useCheckForReservation } from "../../context";
 import { ReservationStatus } from "../reservation-status";
 import { ReservationActions } from "../reservation-actions";
+import { Countdown } from "@/modules/time/components/countdown";
 
 interface ReservationDetailProps {
   reservation: Reservation;
@@ -32,10 +33,21 @@ const ReservationDetail: React.FC<ReservationDetailProps> = ({
       <MicroTitleText className="mb-2">
         Reserved Spot ID: {reservation.spotId}
       </MicroTitleText>
-      {reservation.expiresAt ? (
+      {reservation.status === "pending" && reservation.expiresAt ? (
         <CurrentReservationExpiration expiresAt={reservation.expiresAt} />
       ) : null}
       <ReservationStatus status={reservation.status} className="my-2" />
+      {reservation.checkInAt &&
+      (reservation.status === "active" ||
+        reservation.status === "check-out-initiated") ? (
+        <View>
+          <MicroTitleText>Tiempo transcurrido</MicroTitleText>
+          <Countdown
+            targetDate={new Date(reservation.checkInAt)}
+            className="font-bold text-4xl mb-2"
+          />
+        </View>
+      ) : null}
       <ReservationActions
         id={reservation.id}
         onActionPerformed={checkForReservation}

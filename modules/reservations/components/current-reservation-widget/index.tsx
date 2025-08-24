@@ -22,6 +22,7 @@ import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
 import { BodyText } from "@/modules/ui/components/text/body";
 import { CurrentReservationExpiration } from "../reservation-expiration";
 import Button from "@/modules/ui/components/button";
+import { Countdown } from "@/modules/time/components/countdown";
 
 const NAVIGATION_APPS = [
   ...(Platform.OS === "ios"
@@ -145,18 +146,31 @@ const CurrentReservationWidget: React.FC = () => {
         className="bg-neutral-100 p-4 rounded-xl shadow-md"
       >
         <View className="flex flex-row justify-between">
-          <MicroTitleText className="mb-2">Active Reservation</MicroTitleText>
-          <Text className="text-sm text-neutral-800">Tap to view details</Text>
+          <MicroTitleText className="mb-2">
+            Tu Reservación Actual
+          </MicroTitleText>
+          <Text className="text-sm text-neutral-800">
+            Toca para ver detalles
+          </Text>
         </View>
-        {currentReservation.expiresAt ? (
+        {currentReservation.expiresAt &&
+        currentReservation.status === "pending" ? (
           <CurrentReservationExpiration
             expiresAt={currentReservation.expiresAt}
           />
         ) : null}
-        <View>
+        <View className="mb-2">
           <MiniTitleText>{currentReservation.lot.address}</MiniTitleText>
           <BodyText>{currentReservation.lot.name}</BodyText>
         </View>
+        {(currentReservation.status === "active" ||
+          currentReservation.status === "check-out-initiated") &&
+        currentReservation.checkInAt ? (
+          <Countdown
+            targetDate={new Date(currentReservation.checkInAt)}
+            className="font-bold text-lg"
+          />
+        ) : null}
       </TouchableOpacity>
       {currentReservation.lot?.location ? (
         <Button

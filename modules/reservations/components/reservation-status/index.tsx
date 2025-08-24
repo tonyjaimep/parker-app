@@ -2,16 +2,12 @@ import { View, ViewProps } from "react-native";
 import { ReservationStatus as ReservationStatusType } from "../../types";
 import { BodyText } from "@/modules/ui/components/text/body";
 import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
-
-const statusDescriptions: Record<ReservationStatusType, string> = {
-  pending: "Arrive before the expiration time to check into your parking spot",
-  active: "You're checked in. The parking meter is running.",
-  "check-out-initiated":
-    "Waiting for check-out confirmation from the lot owner.",
-  completed: "Your parking reservation is complete. Thank you!",
-  cancelled: "This parking reservation was cancelled.",
-  expired: "You did not check in before the expiration time.",
-};
+import {
+  reservationStatusBackgroundClassName,
+  reservationStatusHeadingTextClassName,
+  reservationStatusTitles,
+  statusDescriptions,
+} from "../../constants";
 
 type ReservationStatusProps = ViewProps & {
   status: ReservationStatusType;
@@ -24,12 +20,14 @@ export const ReservationStatus = ({
   return (
     <View
       {...viewProps}
-      className={`bg-primary-200 p-4 rounded-lg ${viewProps.className}`}
+      className={`${reservationStatusBackgroundClassName[status]} p-4 rounded-lg ${viewProps.className}`}
     >
-      <MicroTitleText className="text-primary-700 mb-2">
-        Status: {status}
+      <MicroTitleText
+        className={`${reservationStatusHeadingTextClassName[status]} mb-2`}
+      >
+        Estatus: {reservationStatusTitles[status]}
       </MicroTitleText>
-      <BodyText className="text-primary-900">
+      <BodyText className={reservationStatusHeadingTextClassName[status]}>
         {statusDescriptions[status]}
       </BodyText>
     </View>
