@@ -14,6 +14,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BffClientProvider } from "@/modules/bff/context/bff-client-context";
 import { AuthContextProvider } from "@/modules/auth/context/auth-context";
 import { CurrentReservationProvider } from "@/modules/reservations/context";
+import { RealtimeContextProvider } from "@/modules/realtime/context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -28,17 +29,19 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <BffClientProvider>
         <AuthContextProvider>
-          <CurrentReservationProvider>
-            <ThemeProvider
-              value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-            >
-              <Stack>
-                <Stack.Screen name="index" options={{ title: "Map" }} />
-                <Stack.Screen name="auth/index" />
-                <Stack.Screen name="auth/forgot-password" />
-              </Stack>
-            </ThemeProvider>
-          </CurrentReservationProvider>
+          <RealtimeContextProvider>
+            <CurrentReservationProvider>
+              <ThemeProvider
+                value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+              >
+                <Stack>
+                  <Stack.Screen name="index" options={{ title: "Map" }} />
+                  <Stack.Screen name="auth/index" />
+                  <Stack.Screen name="auth/forgot-password" />
+                </Stack>
+              </ThemeProvider>
+            </CurrentReservationProvider>
+          </RealtimeContextProvider>
         </AuthContextProvider>
       </BffClientProvider>
     </GestureHandlerRootView>
