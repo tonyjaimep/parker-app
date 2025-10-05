@@ -49,6 +49,8 @@ export const ReservationAction = ({
         />
       );
     case "cancel":
-      return <CancelAction onPerform={onPerform} />;
+      return (
+        <CancelAction reservationId={reservationId} onPerform={onPerform} />
+      );
   }
 };

@@ -3,8 +3,12 @@ import { ReservationActionBase } from "../base";
 import { BaseReservationActionProps } from "./types";
 import { Alert } from "react-native";
 
-export const CancelAction = ({ onPerform }: BaseReservationActionProps) => {
-  const { cancelReservation } = useCancelReservation({ onSuccess: onPerform });
+type CancelActionProps = BaseReservationActionProps & {
+  reservationId: number
+}
+ 
+export const CancelAction = ({ onPerform, reservationId }: CancelActionProps) => {
+  const { cancelReservation } = useCancelReservation(reservationId, { onSuccess: onPerform });
 
   const perform = () => {
     Alert.alert("Cancel", "Do you want to cancel your reservation?", [
