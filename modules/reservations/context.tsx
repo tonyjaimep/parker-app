@@ -1,7 +1,14 @@
-import { createContext, PropsWithChildren, useContext, useEffect } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+} from "react";
 import { useGetCurrentReservation } from "./hooks/use-get-current-reservation";
 import { Reservation } from "./types";
 import { isEmpty } from "lodash";
+import { useRealtimeUpdateHandler } from "../realtime/context";
 
 type ReservationContext = {
   currentReservation: Reservation | null;
@@ -28,6 +35,13 @@ export const CurrentReservationProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     getCurrentReservation();
   }, [getCurrentReservation]);
+
+  const handleReservationUpdated = useCallback(
+    () => getCurrentReservation(),
+    [],
+  );
+
+  useRealtimeUpdateHandler("reservation-updated", handleReservationUpdated);
 
   return (
     <CurrentReservationContext.Provider value={value}>
