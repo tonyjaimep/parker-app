@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { useBffClient } from "../../bff/context/bff-client-context";
-import auth, { getIdToken } from "@react-native-firebase/auth";
+import { getAuth, getIdToken } from "@react-native-firebase/auth";
 import { Alert } from "react-native";
 
 type EmailAuthContextValue = {
@@ -48,7 +48,8 @@ export const EmailAuthContextProvider = ({
     async (email: string, password: string) => {
       setIsLoading(true);
       try {
-        await auth().signInWithEmailAndPassword(email, password);
+        const auth = getAuth();
+        await auth.signInWithEmailAndPassword(email, password);
       } catch (error) {
         const firebaseError = error as { code: string };
 
@@ -83,8 +84,10 @@ export const EmailAuthContextProvider = ({
       displayName: string,
     ) => {
       setIsLoading(true);
+      const auth = getAuth();
+
       try {
-        const { user } = await auth().createUserWithEmailAndPassword(
+        const { user } = await auth.createUserWithEmailAndPassword(
           email,
           password,
         );
@@ -100,7 +103,7 @@ export const EmailAuthContextProvider = ({
           },
         );
 
-        await auth().currentUser?.sendEmailVerification();
+        await auth.currentUser?.sendEmailVerification();
       } finally {
         setIsLoading(false);
       }

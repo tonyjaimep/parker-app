@@ -14,8 +14,9 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../types";
 import { isAxiosError } from "axios";
-import auth, {
+import {
   FirebaseAuthTypes,
+  getAuth,
   getIdToken,
 } from "@react-native-firebase/auth";
 import { useRouter } from "expo-router";
@@ -67,20 +68,18 @@ export const AuthContextProvider = ({
       return;
     }
 
-    if (auth().currentUser) {
-      await auth().signOut();
+    const auth = getAuth();
+
+    if (auth.currentUser) {
+      await auth.signOut();
     }
 
-    while (router.canGoBack()) {
-      router.back();
-    }
+    router.replace("/");
     setUser(null);
   }, [router]);
 
   const loadAuth = useCallback(async () => {
     const token = await AsyncStorage.getItem(ASYNC_STORAGE_TOKEN_KEY);
-
-    console.log("token", token);
 
     if (token) {
       try {
@@ -102,21 +101,16 @@ export const AuthContextProvider = ({
     onReady?.();
   }, [bffClient, setBffToken, signOut]);
 
-  useEffect(() => {
-    loadAuth();
-  }, [loadAuth]);
-
   const handleFirebaseTokenChange = useCallback(
     async (token: string | null) => {
+      console.log("handleFirebaseTokenChange");
       if (!token) {
         await AsyncStorage.removeItem(ASYNC_STORAGE_TOKEN_KEY);
       } else {
         await AsyncStorage.setItem(ASYNC_STORAGE_TOKEN_KEY, token);
       }
 
-      // setBffToken updates bffClient, updating loadAuth,
-      // calling the effect above this definition
-      setBffToken(token);
+      loadAuth();
     },
     [setBffToken],
   );
@@ -129,6 +123,8 @@ export const AuthContextProvider = ({
     const handleFirebaseUserChange = async (
       firebaseUser: FirebaseAuthTypes.User | null,
     ) => {
+      console.log("FIREBASE USER CHANGED");
+      console.log(firebaseUser);
       if (!firebaseUser) {
         handleFirebaseTokenChange(null);
       } else {
@@ -137,11 +133,12 @@ export const AuthContextProvider = ({
       }
     };
 
-    const unsubscribeFromAuthStateChanges = auth().onAuthStateChanged(
+    const auth = getAuth();
+    const unsubscribeFromAuthStateChanges = auth.onAuthStateChanged(
       handleFirebaseUserChange,
     );
 
-    const unsubscribeFromIdTokenChanges = auth().onIdTokenChanged(
+    const unsubscribeFromIdTokenChanges = auth.onIdTokenChanged(
       handleFirebaseUserChange,
     );
 
@@ -159,23 +156,6 @@ export const AuthContextProvider = ({
     }),
     [user, signOut, setAccountData],
   );
-
-  useEffect(() => {
-    const tokenRefresher = bffClient.interceptors.request.use(async (config) => {
-      const user = auth().currentUser;
-
-      if (user) {
-        const idToken = await user.getIdToken(true)
-        handleFirebaseTokenChange(idToken)
-      }
-
-      return config
-    })
-
-    return () => {
-      bffClient.interceptors.request.eject(tokenRefresher)
-    }
-  }, [bffClient])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

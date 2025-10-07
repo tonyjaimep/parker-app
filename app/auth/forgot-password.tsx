@@ -1,7 +1,7 @@
 import { useGlobalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
 import { Alert } from "react-native";
-import auth from "@react-native-firebase/auth";
+import { getAuth } from "@react-native-firebase/auth";
 import { Screen } from "@/modules/ui/components/screen";
 import { TitleText } from "@/modules/ui/components/text/title";
 import { BodyText } from "@/modules/ui/components/text/body";
@@ -17,7 +17,8 @@ export default function ForgotPasswordScreen() {
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
     try {
-      await auth().sendPasswordResetEmail(email);
+      const auth = getAuth();
+      await auth.sendPasswordResetEmail(email);
       setEmailSent(true);
     } catch (error) {
       Alert.alert("Error", "Unknown error");
