@@ -6,11 +6,13 @@ import { CurrentReservationExpiration } from "@/modules/reservations/components/
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useOwnedLots } from "@/modules/lots/hooks/use-owned-lots";
+import { useUserReservations } from "@/modules/reservations/hooks/use-user-reservations";
 
 export const AccountNavigationItems = () => {
   const router = useRouter();
   const currentReservation = useCurrentReservation();
   const { ownedLots } = useOwnedLots();
+  const { userReservations } = useUserReservations();
 
   const goToCurrentReservation = () => {
     if (currentReservation) {
@@ -24,6 +26,10 @@ export const AccountNavigationItems = () => {
 
   const goToReservationsOnOwnedLots = () => {
     router.navigate(`/account/lots/reservations`);
+  };
+
+  const goToUserReservations = () => {
+    router.navigate(`/account/reservations`);
   };
 
   return (
@@ -68,7 +74,18 @@ export const AccountNavigationItems = () => {
           <Ionicons name="chevron-forward" size={24} color="black" />
         </TouchableOpacity>
       ) : null}
+      {userReservations && userReservations.length > 0 ? (
+        <TouchableOpacity
+          onPress={goToUserReservations}
+          className="flex flex-row items-center justify-between gap-2 p-4 bg-neutral-100 rounded-lg border border-neutral-400"
+        >
+          <View className="flex flex-col justify-between">
+            <MicroTitleText>My Reservations</MicroTitleText>
+            <BodyText>View your past and upcoming reservations</BodyText>
+          </View>
+          <Ionicons name="chevron-forward" size={24} color="black" />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };
-
