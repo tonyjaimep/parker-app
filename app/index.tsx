@@ -17,6 +17,19 @@ export default function HomeScreen() {
   const [selectedLot, setSelectedLot] = useState<LotWithAvailability>();
   const currentReservation = useCurrentReservation();
 
+  const [forecastDay, setForecastDay] = useState<number>();
+  const [forecastHour, setForecastHour] = useState<number>();
+
+  const handleForecastTimeSelected = (day: number, hour: number) => {
+    setForecastDay(day);
+    setForecastHour(hour);
+  };
+
+  const handleForecastTimeCleared = () => {
+    setForecastDay(undefined);
+    setForecastHour(undefined);
+  };
+
   const unsetSelectedLot = useCallback(() => {
     setSelectedLot(undefined);
   }, []);
@@ -47,6 +60,8 @@ export default function HomeScreen() {
         style={styles.map}
         onLotSelected={setSelectedLot}
         defaultPosition={focusLocation}
+        availabilityForecastDay={forecastDay}
+        availabilityForecastHour={forecastHour}
       />
 
       <View className="pt-safe px-4 gap-4">
@@ -61,7 +76,10 @@ export default function HomeScreen() {
                 defaultValue={focusName}
                 onClear={onClearFocus}
               />
-              <AvailabilitySelector />
+              <AvailabilitySelector
+                onForecastTimeSelected={handleForecastTimeSelected}
+                onForecastTimeCleared={handleForecastTimeCleared}
+              />
             </View>
           )}
         </View>

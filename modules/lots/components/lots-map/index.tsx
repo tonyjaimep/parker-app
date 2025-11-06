@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Coordinates, LotWithAvailability } from "../../types";
 import { useGetLotsWithAvailability } from "../../hooks/use-get-lots-with-availability";
 import { debounce } from "lodash";
+import { LotsMapMarker } from "./marker";
 
 const mexicoRegion: Region = {
   latitude: 23.624813,
@@ -20,14 +21,21 @@ type LotsMapProps = {
   style: any;
   onLotSelected: (lot: any) => void;
   defaultPosition?: Coordinates;
+  availabilityForecastDay?: number;
+  availabilityForecastHour?: number;
 };
 
 export const LotsMap = ({
   style,
   onLotSelected,
   defaultPosition,
+  availabilityForecastDay,
+  availabilityForecastHour,
 }: LotsMapProps) => {
-  const { lots, getLotsWithAvailability } = useGetLotsWithAvailability();
+  const { lots, getLotsWithAvailability } = useGetLotsWithAvailability(
+    availabilityForecastDay,
+    availabilityForecastHour,
+  );
   const [isMapReady, setIsMapReady] = useState(false);
 
   const mapRef = useRef<MapView>(null);
@@ -109,7 +117,9 @@ export const LotsMap = ({
                 key={lot.id}
                 coordinate={lot.location}
                 onPress={(event) => handleLotMarkerPressed(event, lot)}
-              />
+              >
+                <LotsMapMarker availability={lot.availability} />
+              </Marker>
             ) : null,
           )
         : []}

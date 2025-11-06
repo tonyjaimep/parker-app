@@ -3,7 +3,6 @@ import { Picker } from "@react-native-picker/picker";
 import { MiniTitleText } from "@/modules/ui/components/text/mini-title";
 import Button from "@/modules/ui/components/button";
 import { useState } from "react";
-import { BodyText } from "@/modules/ui/components/text/body";
 import { MicroTitleText } from "@/modules/ui/components/text/micro-title";
 
 const dayItems = [
@@ -18,7 +17,15 @@ const dayItems = [
 
 const hourItems = Array.from({ length: 24 }).map((_, i) => i);
 
-export const AvailabilitySelector = () => {
+type AvailabilitySelectorProps = {
+  onForecastTimeSelected: (day: number, hour: number) => unknown;
+  onForecastTimeCleared: () => void;
+};
+
+export const AvailabilitySelector = ({
+  onForecastTimeSelected,
+  onForecastTimeCleared,
+}: AvailabilitySelectorProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
   const [selectedTime, setSelectedTime] = useState(9);
@@ -28,11 +35,13 @@ export const AvailabilitySelector = () => {
   const openModal = () => setIsModalOpen(true);
 
   const goBack = () => {
+    onForecastTimeCleared();
     setSeeksAvailableNow(true);
     closeModal();
   };
 
   const commit = () => {
+    onForecastTimeSelected(selectedDay, selectedTime);
     setSeeksAvailableNow(false);
     closeModal();
   };

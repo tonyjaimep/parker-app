@@ -13,7 +13,10 @@ type Bounds = {
   };
 };
 
-export const useGetLotsWithAvailability = () => {
+export const useGetLotsWithAvailability = (
+  availabilityForecastDay?: number,
+  availabilityForecastHour?: number,
+) => {
   const {
     execute,
     isLoading,
@@ -25,6 +28,8 @@ export const useGetLotsWithAvailability = () => {
       await execute({
         with_availability: true,
         bounds,
+        availability_forecast_day: availabilityForecastDay,
+        availability_forecast_hour: availabilityForecastHour,
       });
     },
     [execute],
