@@ -2,11 +2,19 @@ import MapView, {
   Marker,
   MarkerPressEvent,
   PROVIDER_GOOGLE,
+  Region,
 } from "react-native-maps";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LotWithAvailability } from "../../types";
 import { useGetLotsWithAvailability } from "../../hooks/use-get-lots-with-availability";
 import { debounce } from "lodash";
+
+const mexicoRegion: Region = {
+  latitude: 23.624813,
+  longitude: -102.55,
+  latitudeDelta: 30,
+  longitudeDelta: 30,
+};
 
 export const LotsMap = ({
   style,
@@ -75,6 +83,7 @@ export const LotsMap = ({
       onRegionChangeComplete={handleRegionChange}
       provider={PROVIDER_GOOGLE}
       onMapReady={handleMapReady}
+      initialRegion={mexicoRegion}
     >
       {lots
         ? lots.map((lot) =>
