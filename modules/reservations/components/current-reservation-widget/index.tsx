@@ -49,7 +49,7 @@ const NAVIGATION_APPS = [
   },
 ];
 
-const CurrentReservationWidget: React.FC = () => {
+const CurrentReservationWidget = () => {
   const router = useRouter();
   const currentReservation = useCurrentReservation();
   const isLoading = useIsLoadingCurrentReservation();

@@ -9,10 +9,13 @@ import AuthWidget from "@/modules/auth/components/AuthWidget";
 import { LotsMap } from "@/modules/lots/components/lots-map";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import { PlaceSearchWidget } from "@/modules/place-search/components/place-search-widget";
+import { AvailabilitySelector } from "@/modules/availability/components/availability-selector";
+import { useCurrentReservation } from "@/modules/reservations/context";
 
 export default function HomeScreen() {
   const router = useRouter();
   const [selectedLot, setSelectedLot] = useState<LotWithAvailability>();
+  const currentReservation = useCurrentReservation();
 
   const unsetSelectedLot = useCallback(() => {
     setSelectedLot(undefined);
@@ -52,7 +55,15 @@ export default function HomeScreen() {
         </View>
         <View>
           <CurrentReservationWidget />
-          <PlaceSearchWidget defaultValue={focusName} onClear={onClearFocus} />
+          {currentReservation ? null : (
+            <View className="gap-2">
+              <PlaceSearchWidget
+                defaultValue={focusName}
+                onClear={onClearFocus}
+              />
+              <AvailabilitySelector />
+            </View>
+          )}
         </View>
       </View>
 
