@@ -5,7 +5,7 @@ import MapView, {
   Region,
 } from "react-native-maps";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LotWithAvailability } from "../../types";
+import { Coordinates, LotWithAvailability } from "../../types";
 import { useGetLotsWithAvailability } from "../../hooks/use-get-lots-with-availability";
 import { debounce } from "lodash";
 
@@ -16,13 +16,17 @@ const mexicoRegion: Region = {
   longitudeDelta: 30,
 };
 
+type LotsMapProps = {
+  style: any;
+  onLotSelected: (lot: any) => void;
+  defaultPosition?: Coordinates;
+};
+
 export const LotsMap = ({
   style,
   onLotSelected,
-}: {
-  style: any;
-  onLotSelected: (lot: any) => void;
-}) => {
+  defaultPosition,
+}: LotsMapProps) => {
   const { lots, getLotsWithAvailability } = useGetLotsWithAvailability();
   const [isMapReady, setIsMapReady] = useState(false);
 
@@ -71,6 +75,18 @@ export const LotsMap = ({
   const handleMapReady = useCallback(() => {
     setIsMapReady(true);
   }, []);
+
+  useEffect(() => {
+    if (!defaultPosition || !isMapReady) return;
+
+    mapRef.current?.animateToRegion({
+      ...defaultPosition,
+      latitudeDelta: 0.03,
+      longitudeDelta: 0.03,
+    });
+
+    handleRegionChange();
+  }, [defaultPosition, isMapReady]);
 
   return (
     <MapView

@@ -1,25 +1,50 @@
 import { LotDetail } from "@/modules/lots/components/detail";
 import { LotWithAvailability } from "@/modules/lots/types";
 import { BottomDrawer } from "@/modules/ui/components/bottom-drawer";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Screen } from "react-native-screens";
 import CurrentReservationWidget from "@/modules/reservations/components/current-reservation-widget";
 import AuthWidget from "@/modules/auth/components/AuthWidget";
 import { LotsMap } from "@/modules/lots/components/lots-map";
-import { Stack } from "expo-router";
+import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
+import { PlaceSearchWidget } from "@/modules/place-search/components/place-search-widget";
 
 export default function HomeScreen() {
+  const router = useRouter();
   const [selectedLot, setSelectedLot] = useState<LotWithAvailability>();
 
   const unsetSelectedLot = useCallback(() => {
     setSelectedLot(undefined);
   }, []);
 
+  const { focusName, focusLatitude, focusLongitude } = useGlobalSearchParams<{
+    focusName?: string;
+    focusLatitude?: string;
+    focusLongitude?: string;
+  }>();
+
+  const focusLocation = useMemo(() => {
+    if (!focusLatitude || !focusLongitude) return;
+
+    return {
+      latitude: Number(focusLatitude),
+      longitude: Number(focusLongitude),
+    };
+  }, [focusLatitude, focusLongitude]);
+
+  const onClearFocus = () => {
+    router.setParams({ focusName: "", focusLatitude: "", focusLongitude: "" });
+  };
+
   return (
     <Screen style={styles.screen}>
       <Stack.Screen options={{ headerShown: false }} />
-      <LotsMap style={styles.map} onLotSelected={setSelectedLot} />
+      <LotsMap
+        style={styles.map}
+        onLotSelected={setSelectedLot}
+        defaultPosition={focusLocation}
+      />
 
       <View className="pt-safe px-4 gap-4">
         <View className="flex-row justify-between items-center">
@@ -27,6 +52,7 @@ export default function HomeScreen() {
         </View>
         <View>
           <CurrentReservationWidget />
+          <PlaceSearchWidget defaultValue={focusName} onClear={onClearFocus} />
         </View>
       </View>
 

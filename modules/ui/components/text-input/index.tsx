@@ -5,7 +5,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { ReactElement } from "react";
+import { forwardRef, ReactElement } from "react";
 import { BodyText } from "../text/body";
 
 type TextInputVariant = "neutral" | "primary" | "secondary";
@@ -21,29 +21,35 @@ type TextInputProps = {
   inputClassName?: string;
 } & BtsTextInputProps;
 
-export const TextInput = ({
-  label,
-  style,
-  LeftElement,
-  RightElement,
-  inputClassName,
-  disabled = false,
-  className = "",
-  ...textInputProps
-}: TextInputProps) => {
-  return (
-    <View className={["gap-2", className].join(" ")}>
-      {label ? <BodyText>{label}</BodyText> : null}
-      <View className="rounded-lg bg-neutral-200 flex-row gap-2 items-center">
-        {LeftElement ? LeftElement : null}
-        <BtsTextInput
-          editable={!disabled}
-          placeholderClassName="text-slate-400"
-          className={inputClassName ?? "px-4 py-3 flex-grow"}
-          {...textInputProps}
-        />
-        {RightElement ? RightElement : null}
+export const TextInput = forwardRef<BtsTextInput, TextInputProps>(
+  (
+    {
+      label,
+      style,
+      LeftElement,
+      RightElement,
+      inputClassName,
+      disabled = false,
+      className = "",
+      ...textInputProps
+    },
+    ref,
+  ) => {
+    return (
+      <View className={["gap-2", className].join(" ")}>
+        {label ? <BodyText>{label}</BodyText> : null}
+        <View className="rounded-lg bg-neutral-200 flex-row gap-2 items-center">
+          {LeftElement ? LeftElement : null}
+          <BtsTextInput
+            ref={ref}
+            editable={!disabled}
+            placeholderClassName="text-slate-400"
+            className={inputClassName ?? "px-4 py-3 flex-grow"}
+            {...textInputProps}
+          />
+          {RightElement ? RightElement : null}
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  },
+);
