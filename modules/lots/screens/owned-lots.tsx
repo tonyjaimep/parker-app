@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { Lot } from "../types";
 import Button from "@/modules/ui/components/button";
 import { useOwnedLots } from "../hooks/use-owned-lots";
@@ -17,7 +17,7 @@ const RegisterLotCta = () => {
 
   return (
     <View className="pt-4">
-      <Button label="Add Lot" onPress={navigateToLotForm} />
+      <Button label="Registrar Estacionamiento" onPress={navigateToLotForm} />
     </View>
   );
 };
@@ -73,9 +73,9 @@ export const OwnedLotsScreen = () => {
     return (
       <View className="flex-1 justify-center items-center p-4">
         <Text className="text-negative-800 text-center mb-4">
-          Error fetching lots - {error.message}
+          Error buscando estacionamientos - {error.message}
         </Text>
-        <Button label="Try Again" onPress={refresh} />
+        <Button label="Intentar de nuevo" onPress={refresh} />
       </View>
     );
   }
@@ -91,7 +91,7 @@ export const OwnedLotsScreen = () => {
       ListHeaderComponent={Header}
       ListEmptyComponent={() => (
         <View className="flex-1 justify-center items-center mt-8">
-          <BodyText>No lots found.</BodyText>
+          <BodyText>No encontramos estacionamientos</BodyText>
         </View>
       )}
     />

@@ -3,6 +3,7 @@ import { useUserReservations } from "@/modules/reservations/hooks/use-user-reser
 import { Reservation } from "@/modules/reservations/types";
 import { Screen } from "@/modules/ui/components/screen";
 import { TitleText } from "@/modules/ui/components/text/title";
+import { Stack } from "expo-router";
 
 export default function UserReservationsScreen() {
   const { userReservations, isLoading, refresh } = useUserReservations();
@@ -15,7 +16,9 @@ export default function UserReservationsScreen() {
       renderItem={renderReservationThumbnail}
       contentContainerClassName="gap-3 py-3"
       ListHeaderComponent={<TitleText>Mis Reservaciones</TitleText>}
-    ></Screen>
+    >
+      <Stack.Screen options={{ title: "Mis reservaciones" }} />
+    </Screen>
   );
 }
 

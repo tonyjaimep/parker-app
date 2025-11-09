@@ -80,12 +80,15 @@ const EmailAuth = () => {
   }, []);
 
   return (
-    <Screen className="p-safe">
-      <TitleText className="mb-2">Log In</TitleText>
+    <Screen className="pb-safe pt-3">
+      <TitleText className="mb-1">Entrar</TitleText>
+      <BodyText className="mb-2">
+        Introduce tu correo electrónico para registrarte o iniciar sesión.
+      </BodyText>
       <View className="gap-2 flex flex-row items-end mb-4">
         <View className="flex flex-1">
           <TextInput
-            label="Email"
+            label="Correo electrónico"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -98,7 +101,7 @@ const EmailAuth = () => {
         {isEmailRegistered === undefined ? null : (
           <Button
             onPress={resetEmail}
-            label="Reset"
+            label="Limpiar"
             variant="outline"
             size="sm"
           />
@@ -107,8 +110,8 @@ const EmailAuth = () => {
       {isEmailRegistered !== undefined ? (
         <View>
           <TextInput
-            placeholder="password"
-            label="Password"
+            placeholder="contraseña"
+            label="Contraseña"
             value={password}
             onChangeText={setPassword}
             className="mb-4"
@@ -130,9 +133,10 @@ const EmailAuth = () => {
           {isEmailRegistered === true ? (
             <Link
               href={`/auth/forgot-password?email=${encodeURIComponent(email)}`}
+              className="mb-3"
             >
-              <BodyText className="underline text-blue-500">
-                Forgot your password?
+              <BodyText className="underline text-primary-700">
+                ¿Olvidaste tu contraseña?
               </BodyText>
             </Link>
           ) : null}
@@ -141,13 +145,13 @@ const EmailAuth = () => {
       {isEmailRegistered === false ? (
         <>
           <TextInput
-            label="Full name"
+            label="Nombre completo"
             value={fullName}
             onChangeText={setFullName}
             className="mb-4"
           />
           <TextInput
-            label="First name"
+            label="¿Cómo te decimos?"
             onChange={handleDisplayNameChange}
             value={displayName}
             onChangeText={setDisplayName}
@@ -158,13 +162,13 @@ const EmailAuth = () => {
       {isEmailRegistered === undefined ? (
         <Button
           onPress={handleSubmitEmailPress}
-          label="Continue"
+          label="Continuar"
           disabled={isCheckingEmail || !isEmailValid}
         />
       ) : (
         <Button
           onPress={submit}
-          label={isEmailRegistered ? "Sign in" : "Register"}
+          label={isEmailRegistered ? "Iniciar sesión" : "Registrarse"}
           disabled={isLoading}
         />
       )}

@@ -3,9 +3,9 @@ import { usePlaceSearch } from "@/modules/place-search/hooks/use-place-search";
 import { fetchPlace } from "@/modules/place-search/utils/fetch-place";
 import { Screen } from "@/modules/ui/components/screen";
 import { BodyText } from "@/modules/ui/components/text/body";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 export default function DestinationSearchScreen() {
   const router = useRouter();
@@ -41,6 +41,10 @@ export default function DestinationSearchScreen() {
             )
           }
         >
+          <Stack.Screen
+            name="Buscar destino"
+            options={{ title: "Buscar destino" }}
+          />
           <BodyText>{item.placePrediction.text.text}</BodyText>
         </TouchableOpacity>
       )}

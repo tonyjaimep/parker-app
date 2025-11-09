@@ -4,7 +4,7 @@ import { Stack } from "expo-router";
 export default function OwnedLots() {
   return (
     <>
-      <Stack.Screen options={{ title: "My Lots" }} />
+      <Stack.Screen options={{ title: "Mis estacionamientos" }} />
       <OwnedLotsScreen />
     </>
   );

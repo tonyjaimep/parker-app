@@ -1,3 +1,4 @@
+import colors from "tailwindcss/colors";
 import { TouchableOpacity, View } from "react-native";
 import { BodyText } from "@/modules/ui/components/text/body";
 import { useCurrentReservation } from "@/modules/reservations/context";
@@ -49,29 +50,55 @@ export const AccountNavigationItems = () => {
               />
             ) : null}
           </View>
-          <Ionicons name="chevron-forward" size={24} color="black" />
+          <Ionicons
+            name="chevron-forward"
+            size={24}
+            color={colors.neutral["600"]}
+          />
         </TouchableOpacity>
       ) : null}
       <TouchableOpacity
         onPress={goToLots}
         className="flex flex-row items-center justify-between gap-2 p-4 bg-neutral-100 rounded-lg border border-neutral-400"
       >
-        <View className="flex flex-col justify-between">
-          <MicroTitleText>My Lots</MicroTitleText>
-          <BodyText>View your parking lots</BodyText>
+        <Ionicons
+          name="location-outline"
+          size={24}
+          color={colors.neutral["600"]}
+        />
+        <View className="flex flex-col justify-between flex-1">
+          <MicroTitleText>Mis estacionamientos</MicroTitleText>
+          <BodyText>Ver tus estacionamientos</BodyText>
         </View>
-        <Ionicons name="chevron-forward" size={24} color="black" />
+        <Ionicons
+          name="chevron-forward"
+          size={24}
+          color={colors.neutral["600"]}
+        />
       </TouchableOpacity>
       {ownedLots && ownedLots.length > 0 ? (
         <TouchableOpacity
           onPress={goToReservationsOnOwnedLots}
-          className="flex flex-row items-center justify-between gap-2 p-4 bg-neutral-100 rounded-lg border border-neutral-400"
+          className="flex flex-row items-center justify-between gap-3 p-4 bg-neutral-100 rounded-lg border border-neutral-400"
         >
-          <View className="flex flex-col justify-between">
-            <MicroTitleText>Reservations on my Lots</MicroTitleText>
-            <BodyText>View active reservations on your lots</BodyText>
+          <Ionicons
+            name="file-tray-full"
+            size={24}
+            color={colors.neutral["600"]}
+          />
+          <View className="flex flex-col justify-between shrink">
+            <MicroTitleText>
+              Reservaciones en mis estacionamientos
+            </MicroTitleText>
+            <BodyText>
+              Ver reservaciones que se han hecho en tus estacionamientos
+            </BodyText>
           </View>
-          <Ionicons name="chevron-forward" size={24} color="black" />
+          <Ionicons
+            name="chevron-forward"
+            size={24}
+            color={colors.neutral["600"]}
+          />
         </TouchableOpacity>
       ) : null}
       {userReservations && userReservations.length > 0 ? (
@@ -79,11 +106,20 @@ export const AccountNavigationItems = () => {
           onPress={goToUserReservations}
           className="flex flex-row items-center justify-between gap-2 p-4 bg-neutral-100 rounded-lg border border-neutral-400"
         >
-          <View className="flex flex-col justify-between">
-            <MicroTitleText>My Reservations</MicroTitleText>
-            <BodyText>View your past and upcoming reservations</BodyText>
+          <Ionicons
+            name="ticket-outline"
+            size={24}
+            color={colors.neutral["600"]}
+          />
+          <View className="flex flex-col justify-between flex-1">
+            <MicroTitleText>Mis reservaciones</MicroTitleText>
+            <BodyText>Ver reservaciones que has hecho</BodyText>
           </View>
-          <Ionicons name="chevron-forward" size={24} color="black" />
+          <Ionicons
+            name="chevron-forward"
+            size={24}
+            color={colors.neutral["600"]}
+          />
         </TouchableOpacity>
       ) : null}
     </View>

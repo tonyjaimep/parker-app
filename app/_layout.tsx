@@ -35,7 +35,7 @@ export default function RootLayout() {
                 value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
               >
                 <Stack>
-                  <Stack.Screen name="index" options={{ title: "Map" }} />
+                  <Stack.Screen name="index" options={{ title: "Mapa" }} />
                   <Stack.Screen name="auth/index" />
                   <Stack.Screen name="auth/forgot-password" />
                 </Stack>

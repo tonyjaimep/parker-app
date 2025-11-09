@@ -6,21 +6,21 @@ import { View } from "react-native";
 import { AccountNavigationItems } from "@/modules/account/components/navigation-items";
 
 const screenOptions = {
-    headerTitle: "My Account",
-}
-
+  headerTitle: "Mi cuenta",
+};
 
 export default function AccountScreen() {
-    return (
-        <Screen className="mt-4">
-            <Stack.Screen options={screenOptions} />
-            <View className="flex flex-col gap-4">
-                <AccountProfile />
-                <View className="flex flex-col gap-4">
-                    <AccountNavigationItems />
-                </View>
-                <SignOutButton />
-            </View>
-        </Screen>
-    )
+  return (
+    <Screen className="mt-4">
+      <Stack.Screen options={screenOptions} />
+      <View className="flex flex-col gap-4">
+        <AccountProfile />
+        <View className="flex flex-col gap-4">
+          <AccountNavigationItems />
+        </View>
+        <SignOutButton />
+      </View>
+    </Screen>
+  );
 }
+
